@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.parsers.sfr_parser &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>emn_sdk.io.parsers.sfr_parser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for emn_sdk.io.parsers.sfr_parser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Parse data from SFR experiments.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># stdlib</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="c1"># third-party</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># package</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.parser</span> <span class="k">import</span> <span class="n">BaseParser</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.model</span> <span class="k">import</span> <span class="n">Record</span><span class="p">,</span> <span class="n">DatasetHeader</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">RawDataset</span>
+
+<span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># Simple mapping of some common atomic masses to compounds</span>
+<span class="n">MASS_TO_COMPOUND</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;H2&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;He&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span> <span class="s2">&quot;H2O&quot;</span><span class="p">,</span> <span class="mi">28</span><span class="p">:</span> <span class="s2">&quot;N2&quot;</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span> <span class="s2">&quot;O2&quot;</span><span class="p">,</span> <span class="mi">36</span><span class="p">:</span> <span class="s2">&quot;Ar&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">:</span> <span class="s2">&quot;Ar&quot;</span><span class="p">}</span>
+
+
+<span class="n">_total_times</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># running totals for &#39;timed&#39; decorator</span>
+
+
+<div class="viewcode-block" id="timed"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.timed">[docs]</a><span class="k">def</span> <span class="nf">timed</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">dur</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_total_times</span><span class="p">:</span>
+            <span class="n">_total_times</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">_total_times</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dur</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;fn=</span><span class="si">{name:20s}</span><span class="s2"> sec=</span><span class="si">{dur:.3f}</span><span class="s2"> &quot;</span>
+            <span class="n">f</span><span class="s2">&quot;ttl_sec={round(_total_times[name], 3):.3f}&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+<div class="viewcode-block" id="get_epoch_time"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.get_epoch_time">[docs]</a><span class="k">def</span> <span class="nf">get_epoch_time</span><span class="p">(</span><span class="n">datestr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a date - time string to seconds elapsed since</span>
+<span class="sd">        Jan 1, 1970 00:00:00 UTC and a formatted date string</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        datestr: Input time string</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">       zerpoint time (epoch time of first data point) and collection date</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">zp</span> <span class="o">=</span> <span class="n">datestr</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">zp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">zp</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PM&quot;</span><span class="p">:</span>
+        <span class="n">ms_time</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ms_time</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># either 24H time or AM</span>
+
+    <span class="c1"># convert to struct_time argument</span>
+    <span class="k">if</span> <span class="n">ms_time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">strc_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="n">zp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2"> %Y %I:%M:%S%p&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">strc_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="n">zp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">zp</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2"> %Y %H:%M:%S&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># convert to seconds elapsed since Jan 1, 1970 00:00:00 UTC</span>
+    <span class="n">etime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">strc_time</span><span class="p">)</span>
+    <span class="c1"># convert to formatted date string</span>
+    <span class="n">cdate</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2"> %Y&quot;</span><span class="p">,</span> <span class="n">strc_time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">etime</span><span class="p">,</span> <span class="n">cdate</span></div>
+
+
+<div class="viewcode-block" id="interp_data"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.interp_data">[docs]</a><span class="k">def</span> <span class="nf">interp_data</span><span class="p">(</span><span class="n">xvals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interpolate data to match the mass spec time stamps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        xvals: mass spec time in seconds</span>
+<span class="sd">        data: data to interpolate</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        (dict): keys are settings/column names; values are 1D arrays</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">interp_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">interp_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xvals</span><span class="p">)</span>
+    <span class="n">dxvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span>
+            <span class="n">interp_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">dxvals</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">interp_data</span></div>
+
+
+<div class="viewcode-block" id="merge_dict"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.merge_dict">[docs]</a><span class="k">def</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merge multiple dicts and DataTables.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: data streams to convert</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        datadict (dict): merged dictionary with one time column</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">datadict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">datadict</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span>
+                <span class="n">datadict</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="s2">&quot; Setting&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">datadict</span><span class="p">:</span>
+                <span class="n">datadict</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">datadict</span></div>
+
+
+<div class="viewcode-block" id="create_exp_data"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.create_exp_data">[docs]</a><span class="nd">@timed</span>
+<span class="k">def</span> <span class="nf">create_exp_data</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">exp_name</span><span class="p">,</span> <span class="n">zeroPointTime</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert data arrays to a datatable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        zeroPointTime (int): start time of the experiment in absolute seconds</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        (pandas DataFrame): system reading data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exp_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="n">exp_name</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># convert LabVIEW epochTime to UNIX epochTime</span>
+    <span class="c1"># 24107 days between Jan 1, 1904 and Jan 1, 1970</span>
+    <span class="n">exp_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exp_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">24107</span> <span class="o">*</span> <span class="mi">86400</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">exp_data</span></div>
+
+
+<div class="viewcode-block" id="create_stat_data"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.create_stat_data">[docs]</a><span class="nd">@timed</span>
+<span class="k">def</span> <span class="nf">create_stat_data</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">exp_num</span><span class="p">,</span> <span class="n">time_arr</span><span class="p">,</span> <span class="n">collect_date</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract additional system settings to a datatable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        epoch time array and collection date of the experiment</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        stat_dict and meta data dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stat_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time_arr</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="s2">&quot;Laser&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;BYPASS&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;TRAP&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="n">laser_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">bypass_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">trap_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">line_dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># go through the STAT file to determine relevant lines.</span>
+    <span class="c1"># append boolean &quot;states&quot; as values to those lists</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;STAT</span><span class="si">{exp_num}</span><span class="s2">.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">():</span>
+        <span class="n">line_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;TYPE&quot;</span> <span class="ow">in</span> <span class="n">line_dict</span><span class="p">:</span>
+            <span class="c1"># parse time coordinate, convert to epoch time</span>
+            <span class="n">status_time_array</span> <span class="o">=</span> <span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">status_time</span> <span class="o">=</span> <span class="n">get_epoch_time</span><span class="p">(</span>
+                <span class="n">collect_date</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">status_time_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; M&quot;</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">status_time</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">status_time_array</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">10</span>
+
+            <span class="c1"># update values in Data lists</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s2">&quot;Laser&quot;</span> <span class="ow">in</span> <span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;LABEL&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;NewVal&quot;</span><span class="p">][</span><span class="s2">&quot;Laser State&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">laser_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">status_time</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="s2">&quot;BYPASS&quot;</span> <span class="ow">in</span> <span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;LABEL&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;NewVal&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">bypass_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">status_time</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="s2">&quot;TRAP&quot;</span> <span class="ow">in</span> <span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;LABEL&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">line_dict</span><span class="p">[</span><span class="s2">&quot;NewVal&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">trap_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">status_time</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
+
+    <span class="c1"># the LAST line read contains all metadata dicts</span>
+    <span class="n">all_meta</span> <span class="o">=</span> <span class="n">line_dict</span>
+
+    <span class="c1"># pop elements from lists if they exist, otherwise set value to 0 for</span>
+    <span class="c1"># all time.</span>
+    <span class="c1"># also set initial states to tfirst if neccessary</span>
+    <span class="n">tfirst</span> <span class="o">=</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tlast</span> <span class="o">=</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">laser_data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">now_laser</span> <span class="o">=</span> <span class="n">laser_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">now_laser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tfirst</span><span class="p">:</span>
+            <span class="n">now_laser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfirst</span>
+        <span class="n">next_laser</span> <span class="o">=</span> <span class="n">laser_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">laser_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">now_laser</span> <span class="o">=</span> <span class="n">laser_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">now_laser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tfirst</span><span class="p">:</span>
+            <span class="n">now_laser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfirst</span>
+        <span class="n">next_laser</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">now_laser</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">now_laser</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">next_laser</span> <span class="o">=</span> <span class="n">now_laser</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bypass_data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">now_bypass</span> <span class="o">=</span> <span class="n">bypass_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">now_bypass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tfirst</span><span class="p">:</span>
+            <span class="n">now_bypass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfirst</span>
+        <span class="n">next_bypass</span> <span class="o">=</span> <span class="n">bypass_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">bypass_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">now_bypass</span> <span class="o">=</span> <span class="n">bypass_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">now_bypass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tfirst</span><span class="p">:</span>
+            <span class="n">now_bypass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfirst</span>
+        <span class="n">next_bypass</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">now_bypass</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">now_bypass</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">next_bypass</span> <span class="o">=</span> <span class="n">now_bypass</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trap_data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">now_trap</span> <span class="o">=</span> <span class="n">trap_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">now_trap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tfirst</span><span class="p">:</span>
+            <span class="n">now_trap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfirst</span>
+        <span class="n">next_trap</span> <span class="o">=</span> <span class="n">trap_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">trap_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">now_trap</span> <span class="o">=</span> <span class="n">trap_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">now_trap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tfirst</span><span class="p">:</span>
+            <span class="n">now_trap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfirst</span>
+        <span class="n">next_trap</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">now_trap</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">now_trap</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">next_trap</span> <span class="o">=</span> <span class="n">now_trap</span>
+
+    <span class="c1"># create stat_dict by mapping state changes onto experiment epoch time</span>
+    <span class="n">las</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">byp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tra</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]:</span>
+        <span class="n">las</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">now_laser</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">byp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">now_bypass</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">tra</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">now_trap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">next_laser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">laser_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">now_laser</span> <span class="o">=</span> <span class="n">laser_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">laser_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">next_laser</span> <span class="o">=</span> <span class="n">laser_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">next_laser</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">now_laser</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">next_bypass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">bypass_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">now_bypass</span> <span class="o">=</span> <span class="n">bypass_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bypass_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">next_bypass</span> <span class="o">=</span> <span class="n">bypass_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">next_bypass</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">now_bypass</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">next_trap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">trap_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">now_trap</span> <span class="o">=</span> <span class="n">trap_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trap_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">next_trap</span> <span class="o">=</span> <span class="n">trap_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">next_trap</span> <span class="o">=</span> <span class="p">[</span><span class="n">tlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">now_trap</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># need to convert to numpy arrays for code legacy issues</span>
+    <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;Laser&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">las</span><span class="p">)</span>
+    <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;BYPASS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">byp</span><span class="p">)</span>
+    <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;TRAP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tra</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stat_dict</span><span class="p">,</span> <span class="n">all_meta</span></div>
+
+
+<div class="viewcode-block" id="create_ms_data"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.create_ms_data">[docs]</a><span class="nd">@timed</span>
+<span class="k">def</span> <span class="nf">create_ms_data</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read mass spectrometry data from Merlin TXT file into a datatable</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        msData (pandas DataFrame): the mass spectrometry data</span>
+<span class="sd">        zeroPointTime: start of MS collection</span>
+<span class="sd">        date of MS collection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mass_to_compound</span> <span class="o">=</span> <span class="n">MASS_TO_COMPOUND</span>
+    <span class="c1"># csvfile = csv.reader(open(&quot;data/massToCompound.csv&quot;))</span>
+    <span class="c1"># mass_to_compound = dict(csvfile)</span>
+
+    <span class="c1"># this method is rather crude, but since the file won&#39;t get too big ever,</span>
+    <span class="c1"># this shouldn&#39;t be a problem</span>
+    <span class="c1"># BUT error prone due to changes in Merlin file formats!!</span>
+
+    <span class="n">compound_masses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;Mdata&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">num</span> <span class="o">+</span> <span class="s2">&quot;.log&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">msLog</span><span class="p">:</span>
+        <span class="c1"># extract date/time from the second line of Mdata.log files</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">msLog</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">msLog</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">epoch_time</span><span class="p">,</span> <span class="n">collection_date</span> <span class="o">=</span> <span class="n">get_epoch_time</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+
+        <span class="c1"># extract average masses of compounds from getting the lines after the</span>
+        <span class="c1"># Q1FM Header</span>
+        <span class="k">while</span> <span class="s2">&quot;Q1FM&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">msLog</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">msLog</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">test_array</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="s2">&quot;Tune Tables&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">test_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+                <span class="n">compound_masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">msLog</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+    <span class="c1"># match common masses to names using a dictionary saved as a csv file</span>
+    <span class="n">column_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mass</span> <span class="ow">in</span> <span class="n">compound_masses</span><span class="p">:</span>
+        <span class="n">column_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mass_to_compound</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">mass</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">mass</span><span class="p">))))</span>
+
+    <span class="n">column_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+
+    <span class="c1"># read mass spec data with proper column names</span>
+    <span class="n">index_col</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">ms_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;Mdata&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">num</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">index_col</span><span class="o">=</span><span class="n">index_col</span><span class="p">,</span>
+        <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">names</span><span class="o">=</span><span class="n">column_names</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># change time array to absolute epochTime</span>
+    <span class="n">ms_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span> <span class="o">*</span> <span class="n">ms_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">epoch_time</span>
+    <span class="n">zero_point_time</span> <span class="o">=</span> <span class="n">ms_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">ms_data</span><span class="p">,</span> <span class="n">zero_point_time</span><span class="p">,</span> <span class="n">collection_date</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="StchDirectoryMatcher"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.StchDirectoryMatcher">[docs]</a><span class="k">class</span> <span class="nc">StchDirectoryMatcher</span><span class="p">:</span>
+<div class="viewcode-block" id="StchDirectoryMatcher.match"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.StchDirectoryMatcher.match">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Match a directory of STCH data.</span>
+
+<span class="sd">        Expect the following glob patterns to be present:</span>
+
+<span class="sd">        - Mdata??.txt</span>
+<span class="sd">        - DAC??.txt</span>
+<span class="sd">        - POX??.txt</span>
+<span class="sd">        - STAT??.txt</span>
+
+<span class="sd">        There should be the same number of each file type (pattern).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+        <span class="n">files_of_type</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">base_name</span> <span class="ow">in</span> <span class="s2">&quot;Mdata&quot;</span><span class="p">,</span> <span class="s2">&quot;DAC&quot;</span><span class="p">,</span> <span class="s2">&quot;POX&quot;</span><span class="p">,</span> <span class="s2">&quot;STAT&quot;</span><span class="p">:</span>
+            <span class="n">files_of_type</span><span class="p">[</span><span class="n">base_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{base_name}</span><span class="s2">??.txt&quot;</span><span class="p">)))</span>
+        <span class="n">num_mdata</span> <span class="o">=</span> <span class="n">files_of_type</span><span class="p">[</span><span class="s2">&quot;Mdata&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">num_mdata</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">((</span><span class="n">n</span> <span class="o">==</span> <span class="n">num_mdata</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">files_of_type</span><span class="o">.</span><span class="n">values</span><span class="p">())):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="Parser"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.Parser">[docs]</a><span class="k">class</span> <span class="nc">Parser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse  files in a STCH experiment, and add the data and</span>
+<span class="sd">    metadata to a given Record</span>
+
+<span class="sd">    There should be a list of files:</span>
+<span class="sd">        * Mdata&lt;NN&gt;.txt</span>
+<span class="sd">        * DAC&lt;NN&gt;.txt</span>
+<span class="sd">        * POX&lt;NN&gt;.txt</span>
+<span class="sd">        * STAT&lt;NN&gt;.txt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;SFR directory parser&quot;</span>
+
+    <span class="n">DATA_FILE_NAME</span> <span class="o">=</span> <span class="s2">&quot;Data</span><span class="si">{num}</span><span class="s2">.csv&quot;</span>
+
+    <span class="c1"># add an &quot;EMN&quot; dialect for CSV files, which quotes non-numeric values</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span><span class="s2">&quot;emn&quot;</span><span class="p">,</span> <span class="n">csv</span><span class="o">.</span><span class="n">excel</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_NONNUMERIC</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inline_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inline_data: If True, put all data inline in the JSON record.</span>
+<span class="sd">                         If False, create data files called &quot;Data&lt;NN&gt;.csv&quot;</span>
+<span class="sd">                         with the data as comma-separated values for each</span>
+<span class="sd">                         Mdata&lt;NN&gt;.txt (etc.) processed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inline</span> <span class="o">=</span> <span class="n">inline_data</span>
+
+<div class="viewcode-block" id="Parser.match"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.Parser.match">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">files_of_type</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">base_name</span> <span class="ow">in</span> <span class="s2">&quot;Mdata&quot;</span><span class="p">,</span> <span class="s2">&quot;DAC&quot;</span><span class="p">,</span> <span class="s2">&quot;POX&quot;</span><span class="p">,</span> <span class="s2">&quot;STAT&quot;</span><span class="p">:</span>
+            <span class="n">files_of_type</span><span class="p">[</span><span class="n">base_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{base_name}</span><span class="s2">??.txt&quot;</span><span class="p">)))</span>
+        <span class="n">num_mdata</span> <span class="o">=</span> <span class="n">files_of_type</span><span class="p">[</span><span class="s2">&quot;Mdata&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">num_mdata</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">((</span><span class="n">n</span> <span class="o">==</span> <span class="n">num_mdata</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">files_of_type</span><span class="o">.</span><span class="n">values</span><span class="p">())):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Parser.parse"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.sfr_parser.Parser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Convert raw data and return as records.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="c1"># get num_str from file base names in directory using Mdata head</span>
+        <span class="n">ms_file_nums</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;Mdata*.txt&quot;</span><span class="p">)):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">ms_file_nums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;Mdata&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ms_file_nums</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;No Mdata*.txt files found in </span><span class="si">{path}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">all_meta</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># will be set in loop below</span>
+
+        <span class="c1"># dict storing the run number and data dictionary as the key/value</span>
+        <span class="n">total_data_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">Record</span><span class="p">()</span>
+
+        <span class="c1"># find and process relevant files for each experiment</span>
+        <span class="n">uuids</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">dataset_num</span> <span class="ow">in</span> <span class="n">ms_file_nums</span><span class="p">:</span>
+            <span class="n">ms_result</span> <span class="o">=</span> <span class="n">create_ms_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dataset_num</span><span class="p">)</span>
+            <span class="n">pox_result</span> <span class="o">=</span> <span class="n">create_exp_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;POX</span><span class="si">{dataset_num}</span><span class="s2">.txt&quot;</span><span class="p">,</span> <span class="n">ms_result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">dac_result</span> <span class="o">=</span> <span class="n">create_exp_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;DAC</span><span class="si">{dataset_num}</span><span class="s2">.txt&quot;</span><span class="p">,</span> <span class="n">ms_result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">pox_dict</span> <span class="o">=</span> <span class="n">interp_data</span><span class="p">(</span><span class="n">ms_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">pox_result</span><span class="p">)</span>
+            <span class="n">dac_dict</span> <span class="o">=</span> <span class="n">interp_data</span><span class="p">(</span><span class="n">ms_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">dac_result</span><span class="p">)</span>
+            <span class="n">stat_dict</span><span class="p">,</span> <span class="n">all_meta</span> <span class="o">=</span> <span class="n">create_stat_data</span><span class="p">(</span>
+                <span class="n">path</span><span class="p">,</span> <span class="n">dataset_num</span><span class="p">,</span> <span class="n">ms_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">ms_result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">all_meta</span><span class="p">[</span><span class="s2">&quot;experiment_MD&quot;</span><span class="p">][</span><span class="s2">&quot;file_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset_num</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">uuids</span><span class="p">:</span>
+                <span class="n">uuids</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">LVL_LAB</span><span class="p">:</span> <span class="n">all_meta</span><span class="p">[</span><span class="s2">&quot;dataset_MD&quot;</span><span class="p">],</span>
+                        <span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">LVL_EXP</span><span class="p">:</span> <span class="n">all_meta</span><span class="p">[</span><span class="s2">&quot;lab_experimental_MD&quot;</span><span class="p">],</span>
+                        <span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">LVL_SMP</span><span class="p">:</span> <span class="n">all_meta</span><span class="p">[</span><span class="s2">&quot;sample_MD&quot;</span><span class="p">],</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+            <span class="n">total_data_dict</span><span class="p">[</span><span class="n">dataset_num</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="c1"># total_data_dict[num_str][&quot;rawdat&quot;] = merge_dict(</span>
+            <span class="c1">#    [ms_result[0], pox_dict, dac_dict, stat_dict]</span>
+            <span class="c1"># )</span>
+            <span class="n">all_data</span> <span class="o">=</span> <span class="n">merge_dict</span><span class="p">([</span><span class="n">ms_result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pox_dict</span><span class="p">,</span> <span class="n">dac_dict</span><span class="p">,</span> <span class="n">stat_dict</span><span class="p">])</span>
+            <span class="c1"># add measurement metadata</span>
+            <span class="n">uuids</span><span class="p">[</span><span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">]</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">add_one</span><span class="p">(</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">,</span> <span class="n">all_meta</span><span class="p">[</span><span class="s2">&quot;experiment_MD&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="c1"># add measurement data</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inline</span><span class="p">:</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_data_inline</span><span class="p">(</span><span class="n">dataset_num</span><span class="p">,</span> <span class="n">all_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_data_file</span><span class="p">(</span><span class="n">dataset_num</span><span class="p">,</span> <span class="n">all_data</span><span class="p">)</span>
+            <span class="n">dataset</span><span class="o">.</span><span class="n">set_meta</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="n">uuids</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">rec</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+            <span class="c1"># total_data_dict[num_str][&quot;exmeta&quot;] = all_meta[&quot;experiment_MD&quot;]</span>
+
+        <span class="c1"># total_data_dict[&quot;dsmeta&quot;] = all_meta[&quot;dataset_MD&quot;]</span>
+        <span class="c1"># total_data_dict[&quot;lameta&quot;] = all_meta[&quot;lab_experimental_MD&quot;]</span>
+        <span class="c1"># total_data_dict[&quot;sameta&quot;] = all_meta[&quot;sample_MD&quot;]</span>
+        <span class="c1"># return total_data_dict</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">rec</span><span class="p">]</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_add_data_inline</span><span class="p">(</span><span class="n">dataset_num</span><span class="p">,</span> <span class="n">all_data</span><span class="p">):</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">data_hdr</span> <span class="o">=</span> <span class="n">DatasetHeader</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="n">data_hdr</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">dataset_num</span><span class="p">)</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="n">data_hdr</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_data</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]])):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_data</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">add_observation</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ds</span>
+
+    <span class="k">def</span> <span class="nf">_add_data_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_num</span><span class="p">,</span> <span class="n">all_data</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">csv</span>
+
+        <span class="c1"># create csv file</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA_FILE_NAME</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">dataset_num</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s2">&quot;emn&quot;</span><span class="p">)</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">w</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>  <span class="c1"># header row</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_data</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]])):</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_data</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">RawDataset</span><span class="p">()</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">add_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ds</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
