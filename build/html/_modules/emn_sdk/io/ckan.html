@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.ckan &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>emn_sdk.io.ckan</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for emn_sdk.io.ckan</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">CKAN functions</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># stdlib</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="k">import</span> <span class="n">TemporaryDirectory</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c1"># pkg</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.obs</span> <span class="k">import</span> <span class="n">Subject</span>
+
+<span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CKANError"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKANError">[docs]</a><span class="k">class</span> <span class="nc">CKANError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CKANPackageExistsError"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKANPackageExistsError">[docs]</a><span class="k">class</span> <span class="nc">CKANPackageExistsError</span><span class="p">(</span><span class="n">CKANError</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CKANBase"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKANBase">[docs]</a><span class="k">class</span> <span class="nc">CKANBase</span><span class="p">(</span><span class="n">Subject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span> <span class="o">=</span> <span class="n">url</span><span class="p">,</span> <span class="n">proxies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+
+<div class="viewcode-block" id="CKANBase.get_projects"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKANBase.get_projects">[docs]</a>    <span class="k">def</span> <span class="nf">get_projects</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">permission</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;create_dataset&quot;</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get projects accessible by this user (user known by api-key).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            permission: CKAN permission this user should have in order to include</span>
+<span class="sd">                        the project (aka organization) in the list. Other options</span>
+<span class="sd">                        include: &quot;read&quot;, &quot;manage_group&quot;</span>
+<span class="sd">            fields: List of fields from the project (organization) record to return.</span>
+<span class="sd">                    Default is &quot;id&quot;. Others include &quot;name&quot;, &quot;created&quot;, &quot;description&quot;.</span>
+<span class="sd">                    You can explicitly pass `None` to include all fields.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary where the key is the project&#39;s &quot;display&quot; name, which the</span>
+<span class="sd">            user would see on the web page, and the value is a dict with keys equal</span>
+<span class="sd">            to the list given to the `fields` argument (and values from the record).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_action_url</span><span class="p">(</span><span class="s2">&quot;organization_list_for_user&quot;</span><span class="p">),</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;permission&quot;</span><span class="p">:</span> <span class="n">permission</span><span class="p">},</span>
+                <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_apikey_header</span><span class="p">(),</span>
+                <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Cannot connect to </span><span class="si">{self._url}</span><span class="s2"> [</span><span class="si">{err}</span><span class="s2">]&quot;</span><span class="p">)</span>
+        <span class="n">rjson</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Cannot get list of organizations: &quot;</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{rjson[&#39;error&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">proj_info</span> <span class="ow">in</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># None means &quot;all&quot;</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">proj_info</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Pick default field(s)</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">proj_info</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">proj_info</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">}</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">proj_info</span><span class="p">[</span><span class="s2">&quot;display_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="k">return</span> <span class="n">info</span></div>
+
+    <span class="k">def</span> <span class="nf">_action_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self._url}</span><span class="s2">/api/3/action/</span><span class="si">{action}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_download_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self._url}</span><span class="s2">/dataset/</span><span class="si">{dataset_id}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_apikey_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;X-CKAN-API-Key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_apikey_auth_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="CKAN"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKAN">[docs]</a><span class="k">class</span> <span class="nc">CKAN</span><span class="p">(</span><span class="n">CKANBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that handles connecting to CKAN and downloading/uploading data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">proxies</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;new CKAN instance, url=</span><span class="si">{url}</span><span class="s2">, api_key=</span><span class="si">{api_key}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dsinfo</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="CKAN.set_dataset_info"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKAN.set_dataset_info">[docs]</a>    <span class="k">def</span> <span class="nf">set_dataset_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set info needed when creating any new dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            project: Name of project in CKAN</span>
+<span class="sd">            inst: Name of institution in CKAN</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">org</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dsinfo</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;owner_org&quot;</span><span class="p">:</span> <span class="n">org</span><span class="p">,</span> <span class="s2">&quot;institution&quot;</span><span class="p">:</span> <span class="n">inst</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="CKAN.upload"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKAN.upload">[docs]</a>    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">records</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">basedir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+        <span class="n">use_existing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Upload all the records and files into a new CKAN &quot;package&quot;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Name of the CKAN package</span>
+<span class="sd">            records: The records to upload</span>
+<span class="sd">            files: The files to upload</span>
+<span class="sd">            basedir: Base directory for all the files</span>
+<span class="sd">            use_existing: Do not create package</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Package id of created (or existing) package.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            CKANError: if something goes wrong on the CKAN end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dsinfo</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">create_kw</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">:</span>
+            <span class="n">create_kw</span><span class="p">[</span><span class="s2">&quot;proxies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">use_existing</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_package</span><span class="p">(</span><span class="o">**</span><span class="n">create_kw</span><span class="p">)</span>
+            <span class="n">pkgid</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pkgid</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_upload_records</span><span class="p">(</span><span class="n">pkgid</span><span class="p">,</span> <span class="n">records</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_upload_files</span><span class="p">(</span><span class="n">pkgid</span><span class="p">,</span> <span class="n">basedir</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pkgid</span></div>
+
+    <span class="k">def</span> <span class="nf">_create_package</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;create package &#39;</span><span class="si">{self._dsinfo[&#39;name&#39;]}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_action_url</span><span class="p">(</span><span class="s2">&quot;package_create&quot;</span><span class="p">),</span>
+            <span class="n">json</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dsinfo</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;X-CKAN-API-Key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">,</span>
+                <span class="s2">&quot;content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json;&quot;</span> <span class="s2">&quot;charset=utf-8&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;in use&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="n">CKANPackageExistsError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Package exists: </span><span class="si">{response[&#39;error&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Creating package: </span><span class="si">{response[&#39;error&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_package_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_id</span><span class="p">):</span>
+        <span class="n">url_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_action_url</span><span class="p">(</span><span class="s2">&quot;package_show&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;?id=&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apikey_auth_header</span><span class="p">()</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;requests.get url=&#39;{url_base + ds_id}&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">ds_id</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">rjson</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Cannot get package: </span><span class="si">{msg}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="s2">&quot;resources&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_upload_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkgid</span><span class="p">,</span> <span class="n">records</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;record</span><span class="si">{i}</span><span class="s2">_json&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;record </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># upload JSON</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;Record </span><span class="si">{i}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;mimetype&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;JSON&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;package_id&quot;</span><span class="p">:</span> <span class="n">pkgid</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;record</span><span class="si">{i}</span><span class="s2">.json&quot;</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">as_json</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">))</span>
+                <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;upload to CKAN: </span><span class="si">{path}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_upload</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+                <span class="c1"># upload CSV file for each dataset</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mimetype&quot;</span><span class="p">:</span> <span class="s2">&quot;text/csv&quot;</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;CSV&quot;</span><span class="p">,</span> <span class="s2">&quot;package_id&quot;</span><span class="p">:</span> <span class="n">pkgid</span><span class="p">}</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">rec</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dset</span><span class="p">,</span> <span class="s2">&quot;filenames&quot;</span><span class="p">):</span>
+                        <span class="c1"># upload list of existing files</span>
+                        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">filenames</span><span class="p">:</span>
+                            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span>
+                            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Data file </span><span class="si">{filename}</span><span class="s2">&quot;</span>
+                            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_upload</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># upload inline data, after first exporting it to CSV</span>
+                        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;record</span><span class="si">{i}</span><span class="s2">_table</span><span class="si">{j}</span><span class="s2">&quot;</span>
+                        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="s2">&quot;CSV data </span><span class="si">{j}</span><span class="s2"> in Record </span><span class="si">{i}</span><span class="s2">&quot;</span><span class="p">,)</span>
+                        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;record</span><span class="si">{i}</span><span class="s2">_</span><span class="si">{j}</span><span class="s2">.csv&quot;</span>
+                        <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+                            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+                            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2"> (</span><span class="si">{units}</span><span class="s2">)&quot;</span>
+                                    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">units</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">columns</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+                            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">observations</span><span class="p">:</span>
+                                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_upload</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_upload_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkgid</span><span class="p">,</span> <span class="n">basedir</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">):</span>
+                <span class="n">mtype</span> <span class="o">=</span> <span class="s2">&quot;application/x-ipynb+json&quot;</span>
+                <span class="n">mformat</span> <span class="o">=</span> <span class="s2">&quot;JSON&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">mtype</span><span class="p">,</span> <span class="n">enc</span><span class="p">)</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">mtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s2">&quot;Cannot determine mimetype for </span><span class="si">{filename}</span><span class="s2">: using &quot;</span>
+                        <span class="n">f</span><span class="s2">&quot;application/octet-stream&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">mtype</span> <span class="o">=</span> <span class="s2">&quot;application/octet-stream&quot;</span>  <span class="c1"># generic</span>
+                <span class="n">mformat</span> <span class="o">=</span> <span class="n">mtype</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">basedir</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;file &#39;</span><span class="si">{path}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;package_id&quot;</span><span class="p">:</span> <span class="n">pkgid</span><span class="p">,</span>
+                <span class="s2">&quot;mimetype&quot;</span><span class="p">:</span> <span class="n">mtype</span><span class="p">,</span>
+                <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="n">mformat</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_upload</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Upload files into CKAN dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;CKAN._upload: data=</span><span class="si">{meta}</span><span class="s2">, file=</span><span class="si">{path}</span><span class="s2"> headers={self._apikey_header()}&quot;</span>
+        <span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_action_url</span><span class="p">(</span><span class="s2">&quot;resource_create&quot;</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_apikey_header</span><span class="p">(),</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">files</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;upload&quot;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">))],</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Uploading record: </span><span class="si">{response[&#39;error&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CKAN.download"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.ckan.CKAN.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download all resources from project + dataset into dest_dir.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            project: Project name</span>
+<span class="sd">            dataset: Dataset ID</span>
+<span class="sd">            dest_dir: Destination directory name. Assume it</span>
+<span class="sd">                      already exists</span>
+<span class="sd">            overwrite: Action if file would be overwritten:</span>
+<span class="sd">               - None: Do nothing, overwrite file</span>
+<span class="sd">               - &quot;error&quot;: Raise an error. Don&#39;t download anything.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            (num_files, num_bytes) downloaded</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            CKANError: Connecting/downloading from CKAN</span>
+<span class="sd">            KeyError: If there was a duplicate filename, and</span>
+<span class="sd">                      overwrite_ok was False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_package_resources</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="c1"># download the files in the dataset</span>
+        <span class="n">dest_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">)</span>
+
+        <span class="c1"># check first for duplicate/overwrite</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">overwrite</span> <span class="o">==</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rsrc</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="n">rsrc</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dest_path</span> <span class="o">/</span> <span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+        <span class="c1"># download the data</span>
+        <span class="n">num_files</span><span class="p">,</span> <span class="n">num_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">rsrc</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">rsrc</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">num_bytes</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_resource</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">dest_path</span> <span class="o">/</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">num_files</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">num_files</span><span class="p">,</span> <span class="n">num_bytes</span></div>
+
+    <span class="k">def</span> <span class="nf">_fetch_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_apikey_auth_header</span><span class="p">())</span>
+        <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">nbytes</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nbytes</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

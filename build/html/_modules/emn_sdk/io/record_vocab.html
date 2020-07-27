@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.record_vocab &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>emn_sdk.io.record_vocab</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for emn_sdk.io.record_vocab</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Extend record schema with data-type-specific vocabulary.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># stdlib</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TextIO</span>
+
+<span class="c1"># third-party</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c1"># package</span>
+<span class="kn">from</span> <span class="nn">.ckan</span> <span class="k">import</span> <span class="n">CKANBase</span><span class="p">,</span> <span class="n">CKANError</span>
+
+
+<div class="viewcode-block" id="Vocabulary"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.Vocabulary">[docs]</a><span class="k">class</span> <span class="nc">Vocabulary</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;For the EMN record metadata, provide ability to add a vocabulary of</span>
+<span class="sd">    required fields, conditional on the presence of certain other</span>
+<span class="sd">    field/value combinations. This allows us to basically treat some fields as</span>
+<span class="sd">    specifying the &quot;type&quot; of record, and then check that other</span>
+<span class="sd">    required fields are present for records of that type.</span>
+
+<span class="sd">    Note to developers: this uses the &quot;if&quot;/&quot;then&quot; features in JSON Schema Draft 7.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TBL_COLS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;require&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create from a specification.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            spec: Vocabulary specification. The specification is a dictionary of</span>
+<span class="sd">                  the following form::</span>
+
+<span class="sd">                    { &quot;lab&quot;|&quot;experiment&quot;|&quot;measurement&quot;|&quot;sample&quot; :</span>
+<span class="sd">                      [ &lt;ITEM&gt;, &lt;ITEM&gt;, ... ] }</span>
+
+<span class="sd">                where each `ITEM` is of the form::</span>
+
+<span class="sd">                    { &quot;if&quot;: (&quot;&lt;FIELD&gt;&quot;, &quot;&lt;VALUE&gt;&quot;),</span>
+<span class="sd">                      &quot;require&quot;: [ &lt;PROP&gt;, &lt;PROP&gt;, .. ] }</span>
+
+<span class="sd">                and, finally, each `PROP` is either a string name of a field OR</span>
+<span class="sd">                a tuple of length 2 where the first item is the name of the field</span>
+<span class="sd">                and the second is a dictionary of JSON-Schema constraints such as</span>
+<span class="sd">                &quot;pattern&quot;, &quot;type&quot;, &quot;enum&quot;, &quot;minimum&quot;, &quot;maximum&quot;, etc.</span>
+
+<span class="sd">                In plain English, what this is accomplishing is to specify:</span>
+
+<span class="sd">                * For a metadata section S,</span>
+<span class="sd">                * `if` the value of a field X is some known value Y,</span>
+<span class="sd">                * then `require` that other fields Z(1), Z(2), ..., Z(n)</span>
+<span class="sd">                  are present as well.</span>
+<span class="sd">                * Optionally, also require that the Z fields are</span>
+<span class="sd">                  certain types and/or values.</span>
+<span class="sd">                * If &#39;Y&#39; is empty, then this will apply if &#39;X&#39; is present at all</span>
+<span class="sd">                * if &#39;X&#39; is empty, then &#39;Z(n)&#39; will be required of all metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">spec</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">specification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span>
+
+<div class="viewcode-block" id="Vocabulary.extend"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.Vocabulary.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="n">working_schema</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_conditions</span><span class="p">(</span><span class="n">working_schema</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="c1"># loop over each &#39;level&#39; (sub-section) of metadata</span>
+        <span class="k">for</span> <span class="n">lvl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">:</span>
+            <span class="c1"># metadata subschema definition</span>
+            <span class="n">md_sect</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;definitions&quot;</span><span class="p">][</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{lvl}</span><span class="s2">-metadata&quot;</span><span class="p">]</span>
+            <span class="c1"># section with existing list of conditions</span>
+            <span class="n">item_vals</span> <span class="o">=</span> <span class="n">md_sect</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">][</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
+            <span class="n">allof</span> <span class="o">=</span> <span class="n">item_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;allOf&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">allof</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">allof</span> <span class="o">=</span> <span class="n">item_vals</span><span class="p">[</span><span class="s2">&quot;allOf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># create new conditions</span>
+            <span class="n">conditions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">cond</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">lvl</span><span class="p">]:</span>
+                <span class="n">if_name</span><span class="p">,</span> <span class="n">if_value</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;if&quot;</span><span class="p">]</span>
+                <span class="c1"># empty name means just extend properties</span>
+                <span class="k">if</span> <span class="n">if_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;require&quot;</span><span class="p">]:</span>
+                        <span class="n">item_vals</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">item_vals</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cond</span><span class="p">[</span><span class="s2">&quot;require&quot;</span><span class="p">])</span>
+                    <span class="k">continue</span>
+                <span class="c1"># otherwise add a new condition</span>
+                <span class="n">props</span><span class="p">,</span> <span class="n">props_req</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;require&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="n">props_req</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># tuple name, subschema</span>
+                        <span class="n">name</span><span class="p">,</span> <span class="n">subschema</span> <span class="o">=</span> <span class="n">prop</span>
+                        <span class="n">props</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">subschema</span>
+                        <span class="n">props_req</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="c1"># if the if_value is empty, build a full expression but</span>
+                <span class="c1"># don&#39;t restrict the possible values</span>
+                <span class="k">if</span> <span class="n">if_value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">value_expr</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value_expr</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="n">if_value</span><span class="p">}</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">if_name</span><span class="p">:</span> <span class="n">value_expr</span><span class="p">}},</span>
+                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">props</span><span class="p">,</span> <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">props_req</span><span class="p">},</span>
+                <span class="p">}</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="c1"># add conditions</span>
+            <span class="n">allof</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">schema</span>
+
+<div class="viewcode-block" id="Vocabulary.from_table"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.Vocabulary.from_table">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Vocabulary&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_spec_from_table</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Vocabulary.from_csv"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.Vocabulary.from_csv">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_csv</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Vocabulary&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># CSV filename or CSV data in a buffer</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">initial_value</span><span class="o">=</span><span class="n">obj</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">):</span>
+            <span class="c1"># CSV file object</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;String or file-like object expected, got: {type(obj)}&quot;</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_spec_from_table</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_spec_from_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Expected columns in table:</span>
+
+<span class="sd">        level | field | value | require</span>
+
+<span class="sd">        The `require` field may be a field, a comma-separated list of</span>
+<span class="sd">        fields, or a complex .</span>
+
+<span class="sd">        Any other table columns are ignored.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Specification as expected by `Vocabulary` constructor.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError if the table format is bad</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">TBL_COLS</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># first row is header. find columns (or error)</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                    <span class="n">col</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="s2">&quot;required&quot;</span><span class="p">:</span>  <span class="c1"># allow this alias</span>
+                        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot;require&quot;</span>
+                    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+                        <span class="n">cols</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+                <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="n">cols</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">if</span> <span class="n">cols</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Missing columns: {&#39;, &#39;.join(missing)}&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># every other row is a requirement</span>
+                <span class="n">lvl</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">lvl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+                    <span class="n">spec</span><span class="p">[</span><span class="n">lvl</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">required</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="s2">&quot;require&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s2">&quot;;&quot;</span> <span class="ow">in</span> <span class="n">required</span><span class="p">:</span>  <span class="c1"># complex form (name, subschema)</span>
+                    <span class="n">name</span><span class="p">,</span> <span class="n">subsch</span> <span class="o">=</span> <span class="n">required</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="c1"># treat subschema as a dict (without outer braces)</span>
+                    <span class="n">subsch</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">subsch</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+                    <span class="n">required</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">subsch</span><span class="p">))]</span>
+                <span class="k">elif</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">required</span><span class="p">:</span>
+                    <span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">required</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+                <span class="n">match_name</span><span class="p">,</span> <span class="n">match_value</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">]],</span> <span class="n">row</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]]</span>
+                <span class="c1"># allow some aliases for empty values</span>
+                <span class="c1"># also force value to be empty in that case</span>
+                <span class="k">if</span> <span class="n">match_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;n/a&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">):</span>
+                    <span class="n">match_name</span><span class="p">,</span> <span class="n">match_value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">expr</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">match_name</span><span class="p">,</span> <span class="n">match_value</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="n">required</span><span class="p">}</span>
+                <span class="c1"># add/merge with spec</span>
+                <span class="n">merged</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">spec_expr</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">[</span><span class="n">lvl</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">spec_expr</span><span class="p">[</span><span class="s2">&quot;if&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">expr</span><span class="p">[</span><span class="s2">&quot;if&quot;</span><span class="p">]:</span>
+                        <span class="n">spec_expr</span><span class="p">[</span><span class="s2">&quot;require&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">expr</span><span class="p">[</span><span class="s2">&quot;require&quot;</span><span class="p">])</span>
+                        <span class="n">merged</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">merged</span><span class="p">:</span>
+                    <span class="n">spec</span><span class="p">[</span><span class="n">lvl</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span>
+
+<div class="viewcode-block" id="Vocabulary.from_ckan"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.Vocabulary.from_ckan">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_ckan</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">passwd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Vocabulary&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create from CKAN dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user: CKAN login name</span>
+<span class="sd">            passwd: CKAN login password</span>
+<span class="sd">            dataset_id: CKAN dataset (package) with vocabulary resource(s)</span>
+<span class="sd">            *args: Passed to :class:`io.ckan.CKANBase` constructor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Instance, initialized from the dataset.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            CKANError: for problems with CKAN</span>
+<span class="sd">            ValueError: for problems with the data itself</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ckan_vocab</span> <span class="o">=</span> <span class="n">CKANVocabulary</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">vocab</span> <span class="o">=</span> <span class="n">ckan_vocab</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="p">,</span> <span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vocab</span></div></div>
+
+
+<div class="viewcode-block" id="CKANVocabulary"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.CKANVocabulary">[docs]</a><span class="k">class</span> <span class="nc">CKANVocabulary</span><span class="p">(</span><span class="n">CKANBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interaction with a vocabulary (stored as CSV) on a CKAN server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">institution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fetched</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># can change these later</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">institution</span> <span class="o">=</span> <span class="n">institution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bad_csv</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="CKANVocabulary.fetch"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.record_vocab.CKANVocabulary.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">passwd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">dataset_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ignore_other_csv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vocabulary</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Fetch vocabulary from combined resources in the given dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user: CKAN login name</span>
+<span class="sd">            passwd: CKAN password</span>
+<span class="sd">            dataset_id: CKAN dataset ID</span>
+<span class="sd">            ignore_other_csv: If True, allow non-vocabulary CSV, otherwise</span>
+<span class="sd">                              raise a ValueError.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Vocabulary instance</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: if there are no (parse-able) resources with data</span>
+<span class="sd">            CKANError: problems communicating with CKAN</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bad_csv</span> <span class="o">=</span> <span class="n">ignore_other_csv</span>
+        <span class="c1"># find and retrieve the data</span>
+        <span class="k">if</span> <span class="n">dataset_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Vocabulary dataset ID is required&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_data</span><span class="p">(</span><span class="n">dataset_id</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">CKANError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># only header row means no data</span>
+            <span class="n">bad</span> <span class="o">=</span> <span class="s2">&quot; valid &quot;</span> <span class="k">if</span> <span class="n">ignore_other_csv</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;No</span><span class="si">{bad}</span><span class="s2">vocabulary resources found in &#39;</span><span class="si">{dataset_id}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="n">vocab</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vocab</span></div>
+
+    <span class="k">def</span> <span class="nf">_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;User/password login is needed to download data from CKAN,</span>
+<span class="sd">        i.e. there is no API for it.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Session with logged in user</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: if the login fails</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;login&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span><span class="p">}</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">+</span> <span class="s2">&quot;/login_generic&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;field-login&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+            <span class="c1"># Response still contains login form</span>
+            <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;login failed for user </span><span class="si">{username}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">_fetch_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsid</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Find and fetch data.&quot;&quot;&quot;</span>
+        <span class="c1"># find vocabulary resources in dataset</span>
+        <span class="n">show_info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;owner_org&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+            <span class="s2">&quot;institution&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">institution</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">dsid</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_action_url</span><span class="p">(</span><span class="s2">&quot;package_show&quot;</span><span class="p">),</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">show_info</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_apikey_header</span><span class="p">(),</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">rjson</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;Cannot get resources in dataset </span><span class="si">{dsid}</span><span class="s2">: &quot;</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{rjson[&#39;error&#39;]}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">rjson</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="s2">&quot;resources&quot;</span><span class="p">]</span>
+
+        <span class="c1"># download CSV files and parse as tables</span>
+        <span class="n">sess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_login</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="p">)</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">Vocabulary</span><span class="o">.</span><span class="n">TBL_COLS</span><span class="p">)]</span>  <span class="c1"># new, with header</span>
+        <span class="k">for</span> <span class="n">rsrc</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
+            <span class="c1"># only look at CSV files (use mimetype; more reliable than &#39;format&#39;)</span>
+            <span class="k">if</span> <span class="n">rsrc</span><span class="p">[</span><span class="s2">&quot;mimetype&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;text/csv&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># get the data from the CKAN session</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">rsrc</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">rjson</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+                    <span class="n">rjson</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">)}</span>
+                <span class="k">raise</span> <span class="n">CKANError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Getting resource </span><span class="si">{url}</span><span class="s2">: </span><span class="si">{rjson[&#39;error&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># convert CSV data into a table</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">rsrc_table</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">initial_value</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">()))</span>
+            <span class="k">except</span> <span class="ne">UnicodeDecodeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bad_csv</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s2">&quot;Error decoding &#39;</span><span class="si">{rsrc[&#39;name&#39;]}</span><span class="s2">&#39; &quot;</span>
+                        <span class="n">f</span><span class="s2">&quot;in dataset &#39;</span><span class="si">{dsid}</span><span class="s2">&#39;: </span><span class="si">{err}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+            <span class="c1"># get index mapping of columns in the input table</span>
+            <span class="c1"># note: Create a table with only required columns, in a standard order.</span>
+            <span class="c1">#       This allows all the tables to be simply concatenated.</span>
+            <span class="n">hdr</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">rsrc_table</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">col_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">hdr</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bad_csv</span><span class="p">:</span>
+                    <span class="n">col_idx</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">bad_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s2">&quot;Error parsing resource &#39;</span><span class="si">{rsrc[&#39;name&#39;]}</span><span class="s2">&#39; &quot;</span>
+                        <span class="n">f</span><span class="s2">&quot;in dataset &#39;</span><span class="si">{dsid}</span><span class="s2">&#39;: missing </span><span class="si">{bad_key}</span><span class="s2"> column&quot;</span>
+                    <span class="p">)</span>
+            <span class="c1"># add to main table (using index mapping)</span>
+            <span class="k">if</span> <span class="n">col_idx</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rsrc_table</span><span class="p">:</span>
+                    <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">col_idx</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">table</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

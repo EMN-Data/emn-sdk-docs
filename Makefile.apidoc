@@ -1,0 +1,9 @@
+
+default: build
+
+.PHONY: build
+build:
+	sphinx-apidoc -o source/apidoc/ ../emn_sdk
+
+clean:
+	/bin/rm -rf source/apidoc

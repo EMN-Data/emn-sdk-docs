@@ -1,0 +1,10 @@
+emn\_sdk.examples package
+=========================
+
+Module contents
+---------------
+
+.. automodule:: emn_sdk.examples
+    :members:
+    :undoc-members:
+    :show-inheritance:

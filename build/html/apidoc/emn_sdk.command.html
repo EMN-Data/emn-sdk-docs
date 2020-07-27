@@ -1,0 +1,406 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.command package &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="emn_sdk.io package" href="emn_sdk.io.html" />
+    <link rel="prev" title="emn_sdk package" href="emn_sdk.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="emn_sdk.html">emn_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="emn_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">emn_sdk.command package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.html">emn_sdk.io package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk.settings">emn_sdk.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">emn_sdk</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.html">emn_sdk package</a> &raquo;</li>
+        
+      <li>emn_sdk.command package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/apidoc/emn_sdk.command.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="emn-sdk-command-package">
+<h1>emn_sdk.command package<a class="headerlink" href="#emn-sdk-command-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-emn_sdk.command.parse">
+<span id="emn-sdk-command-parse-module"></span><h2>emn_sdk.command.parse module<a class="headerlink" href="#module-emn_sdk.command.parse" title="Permalink to this headline">¶</a></h2>
+<p>Parse a file from command-line.</p>
+<p>This just calls the validate command after setting dump_records=True.</p>
+<dl class="function">
+<dt id="emn_sdk.command.parse.command">
+<code class="sig-prename descclassname">emn_sdk.command.parse.</code><code class="sig-name descname">command</code><span class="sig-paren">(</span><em class="sig-param">args: argparse.Namespace</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/emn_sdk/command/parse.html#command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.parse.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – sub-command args from argparse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.command.ui">
+<span id="emn-sdk-command-ui-module"></span><h2>emn_sdk.command.ui module<a class="headerlink" href="#module-emn_sdk.command.ui" title="Permalink to this headline">¶</a></h2>
+<p>Command-line for UI command</p>
+<dl class="function">
+<dt id="emn_sdk.command.ui.command">
+<code class="sig-prename descclassname">emn_sdk.command.ui.</code><code class="sig-name descname">command</code><span class="sig-paren">(</span><em class="sig-param">args: argparse.Namespace</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/emn_sdk/command/ui.html#command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.ui.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>EMN upload/download GUI</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – sub-command args from argparse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.command.upload">
+<span id="emn-sdk-command-upload-module"></span><h2>emn_sdk.command.upload module<a class="headerlink" href="#module-emn_sdk.command.upload" title="Permalink to this headline">¶</a></h2>
+<p>Upload a file or directory from command-line</p>
+<dl class="class">
+<dt id="emn_sdk.command.upload.CKANObserver">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.command.upload.</code><code class="sig-name descname">CKANObserver</code><a class="reference internal" href="../_modules/emn_sdk/command/upload.html#CKANObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.upload.CKANObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.obs.Observer</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.command.upload.CKANObserver.notify">
+<code class="sig-name descname">notify</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/command/upload.html#CKANObserver.notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.upload.CKANObserver.notify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.command.upload.command">
+<code class="sig-prename descclassname">emn_sdk.command.upload.</code><code class="sig-name descname">command</code><span class="sig-paren">(</span><em class="sig-param">args: argparse.Namespace</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/emn_sdk/command/upload.html#command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.upload.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – sub-command args from argparse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.command.util">
+<span id="emn-sdk-command-util-module"></span><h2>emn_sdk.command.util module<a class="headerlink" href="#module-emn_sdk.command.util" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions and classes for CLI.</p>
+<dl class="class">
+<dt id="emn_sdk.command.util.Color">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.command.util.</code><code class="sig-name descname">Color</code><a class="reference internal" href="../_modules/emn_sdk/command/util.html#Color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.util.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.BLACK">
+<code class="sig-name descname">BLACK</code><em class="property"> = '\x1b[30m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.BLACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.BLUE">
+<code class="sig-name descname">BLUE</code><em class="property"> = '\x1b[34m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.BLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.CYAN">
+<code class="sig-name descname">CYAN</code><em class="property"> = '\x1b[36m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.CYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.GREEN">
+<code class="sig-name descname">GREEN</code><em class="property"> = '\x1b[32m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.GREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.MAGENTA">
+<code class="sig-name descname">MAGENTA</code><em class="property"> = '\x1b[35m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.MAGENTA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.RED">
+<code class="sig-name descname">RED</code><em class="property"> = '\x1b[31m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.RED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.RESET">
+<code class="sig-name descname">RESET</code><em class="property"> = '\x1b[0m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.RESET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.UNDERLINE">
+<code class="sig-name descname">UNDERLINE</code><em class="property"> = '\x1b[4m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.UNDERLINE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.WHITE">
+<code class="sig-name descname">WHITE</code><em class="property"> = '\x1b[37m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.WHITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.command.util.Color.YELLOW">
+<code class="sig-name descname">YELLOW</code><em class="property"> = '\x1b[33m'</em><a class="headerlink" href="#emn_sdk.command.util.Color.YELLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.command.util.error">
+<code class="sig-prename descclassname">emn_sdk.command.util.</code><code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/command/util.html#error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.util.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.command.util.info">
+<code class="sig-prename descclassname">emn_sdk.command.util.</code><code class="sig-name descname">info</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/command/util.html#info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.util.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.command.util.status">
+<code class="sig-prename descclassname">emn_sdk.command.util.</code><code class="sig-name descname">status</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/command/util.html#status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.util.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.command.validate">
+<span id="emn-sdk-command-validate-module"></span><h2>emn_sdk.command.validate module<a class="headerlink" href="#module-emn_sdk.command.validate" title="Permalink to this headline">¶</a></h2>
+<p>Validate a file or directory</p>
+<dl class="function">
+<dt id="emn_sdk.command.validate.command">
+<code class="sig-prename descclassname">emn_sdk.command.validate.</code><code class="sig-name descname">command</code><span class="sig-paren">(</span><em class="sig-param">args: argparse.Namespace</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/emn_sdk/command/validate.html#command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.validate.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – sub-command args from argparse</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>0 if ok, error code otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.command">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-emn_sdk.command" title="Permalink to this headline">¶</a></h2>
+<p>Main entry point for emn_sdk commands.</p>
+<dl class="function">
+<dt id="emn_sdk.command.list_subcommands">
+<code class="sig-prename descclassname">emn_sdk.command.</code><code class="sig-name descname">list_subcommands</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/emn_sdk/command.html#list_subcommands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.list_subcommands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.command.main">
+<code class="sig-prename descclassname">emn_sdk.command.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/emn_sdk/command.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for the ‘emn’ command-line.</p>
+<p>This is referenced in <cite>setup.py</cite> keyword arguments to the setup function,
+in the ‘entry_points.console_scripts’ section.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.command.usage">
+<code class="sig-prename descclassname">emn_sdk.command.</code><code class="sig-name descname">usage</code><span class="sig-paren">(</span><em class="sig-param">args: argparse.Namespace</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/command.html#usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.command.usage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="emn_sdk.io.html" class="btn btn-neutral float-right" title="emn_sdk.io package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="emn_sdk.html" class="btn btn-neutral float-left" title="emn_sdk package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

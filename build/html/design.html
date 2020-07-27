@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EMN-SDK Design &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="emn_sdk" href="apidoc/modules.html" />
+    <link rel="prev" title="Energy Materials Network Software Development Kit (EMN-SDK)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">EMN-SDK Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsers">Parsers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upload">Upload</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc/modules.html">modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>EMN-SDK Design</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/design.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="emn-sdk-design">
+<h1>EMN-SDK Design<a class="headerlink" href="#emn-sdk-design" title="Permalink to this headline">¶</a></h1>
+<p>This page describes some design principles of the <cite>emn_sdk</cite> Python package.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The main purpose of the package is to standardize the data that is being
+uploaded and downloaded from the EMN Data Hubs. The focus of the
+work, initially, is the HydroGEN data hub, but the goal is to provide
+extensible functionality that could be used by any of the hubs.</p>
+<p>The core functions being supported are <em>upload</em> and <em>download</em>. All
+the metadata is represented in a standard format, that can be
+stored as a JSON file. There is a machine-readable specification of
+that common structure, as part of the package, that uses
+a specification language called <em>JSON Schema</em>.</p>
+<div class="section" id="parsers">
+<h3>Parsers<a class="headerlink" href="#parsers" title="Permalink to this headline">¶</a></h3>
+<p>The Python code that
+extracts the metadata from the user-provided data files, and performs
+other desired transformations of the data, is called a <em>parser</em>. Each
+type of input data has its own parser, and these are arranged in
+a framework that allows new parsers to be added without changing any
+of the other infrastructure.</p>
+<p>All parsers operate like this: given a single file or directory of files,
+create a metadata <em>record</em> that contains standardized fields,
+as well as optional tabular data. The record is represented as a Python
+class, which can be serialized to and from a JSON file.</p>
+<p>Current parsers include a “spreadsheet” parser, that can handle either
+Excel spreadsheets or comma-separated values text files that contain
+metadata and data sections. Also, there is a parser for the Sandia
+STCH data, that operates on a directory of files.</p>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The user interfaces to data upload and download share a common method
+of configuration, which is by default stored as the file “~/.emn/config.json”,
+(“~” means your home directory). Here is an example file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;ckan_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://datahub.h2awsm.org&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;5298619f-b6ac-...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;institution&quot;</span><span class="p">:</span> <span class="s2">&quot;Lawrence Berkeley National Laboratory&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="s2">&quot;API Sandbox&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_path&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As you can see, this file can store information that will be used for multiple
+uploads and downloads. It can be extended to include new information as the
+interfaces evolve and add new features.</p>
+</div>
+<div class="section" id="upload">
+<h3>Upload<a class="headerlink" href="#upload" title="Permalink to this headline">¶</a></h3>
+<p>Upload can be performed with a graphical desktop application or a command-line program.
+Either way, the series of steps that occur in the upload are:</p>
+<ol class="arabic simple">
+<li><p>Load settings from the configuration file (see above).</p></li>
+<li><p>User specifies input directory or file.</p></li>
+<li><p>User specifies data type and parser, or system auto-detects it based on the
+input from Step 2. For example, the “spreadsheet” parser will recognize
+any file with an extension “.csv” or “.xlsx”.</p></li>
+<li><p>Run parser from Step 3 to generate standard metadata file(s) and,
+depending on the parser, other derived data files.</p></li>
+<li><p>User specifies the name of the new dataset (package)</p></li>
+<li><p>Connect to CKAN and optionally create the dataset given in Step 5.</p></li>
+<li><p>Load all the files created in Step 4 into the dataset.</p></li>
+</ol>
+<p>Note that the only input needed from the user is the source data and the name
+of the dataset to create on CKAN (and the input data type, if the system
+cannot guess it). The configuration file handles repeated information like the
+CKAN URL and user API key, and the parser framework creates all of the metadata.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="apidoc/modules.html" class="btn btn-neutral float-right" title="emn_sdk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Energy Materials Network Software Development Kit (EMN-SDK)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
