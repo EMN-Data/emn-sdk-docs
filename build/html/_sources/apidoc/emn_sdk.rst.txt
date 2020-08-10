@@ -8,6 +8,7 @@ Subpackages
 
    emn_sdk.command
    emn_sdk.io
+   emn_sdk.gui
 
 Submodules
 ----------
