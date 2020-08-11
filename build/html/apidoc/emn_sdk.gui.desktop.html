@@ -35,7 +35,8 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="emn_sdk.gui package" href="emn_sdk.gui.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,9 +82,23 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../design.html">EMN-SDK Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="emn_sdk.html">emn_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="emn_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.command.html">emn_sdk.command package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.html">emn_sdk.io package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="emn_sdk.gui.html">emn_sdk.gui package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk.settings">emn_sdk.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -130,6 +145,12 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
+          <li><a href="modules.html">emn_sdk</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.html">emn_sdk package</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.gui.html">emn_sdk.gui package</a> &raquo;</li>
+        
       <li>emn_sdk.gui.desktop package</li>
     
     
@@ -160,10 +181,17 @@
 <dt id="emn_sdk.gui.desktop.gui.Archive">
 <em class="property">class </em><code class="sig-prename descclassname">emn_sdk.gui.desktop.gui.</code><code class="sig-name descname">Archive</code><span class="sig-paren">(</span><em class="sig-param">url=None</em>, <em class="sig-param">apikey=None</em>, <em class="sig-param">project=None</em>, <em class="sig-param">proxies=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#Archive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.Archive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class used to connect to CKAN, upload, and download datasets.</p>
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.Archive.create_dataset">
 <code class="sig-name descname">create_dataset</code><span class="sig-paren">(</span><em class="sig-param">package_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#Archive.create_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.Archive.create_dataset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create a dataset on CKAN server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>package_id</strong> – name of dataset</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.Archive.download_dataset">
@@ -188,7 +216,13 @@
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.Archive.get_all_projects">
 <code class="sig-name descname">get_all_projects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#Archive.get_all_projects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.Archive.get_all_projects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get all projects associated with the API key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary of projects on the API key from CKAN</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.Archive.upload_files">
@@ -201,11 +235,8 @@
 <li><p><strong>file_or_dir</strong> – uploaded file or directory</p></li>
 <li><p><strong>metadata</strong> (<em>dict</em>) – Other key/value pairs added to resource metadata</p></li>
 <li><p><strong>include_source</strong> (<em>bool</em>) – If true, upload pretty much everything in the
-input directory.</p></li>
+input directory</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -228,6 +259,7 @@ input directory.</p></li>
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI">
 <em class="property">class </em><code class="sig-prename descclassname">emn_sdk.gui.desktop.gui.</code><code class="sig-name descname">TabbedUI</code><span class="sig-paren">(</span><em class="sig-param">main_window</em>, <em class="sig-param">combobox=None</em>, <em class="sig-param">parent=None</em>, <em class="sig-param">settings_path: pathlib.Path = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QTabWidget</span></code></p>
+<p>A class used to display the User Interface.</p>
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.choose_data_dest">
 <code class="sig-name descname">choose_data_dest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.choose_data_dest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.choose_data_dest" title="Permalink to this definition">¶</a></dt>
@@ -250,43 +282,74 @@ input directory.</p></li>
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.download_action">
 <code class="sig-name descname">download_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.download_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.download_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download dataset resources from CKAN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#emn_sdk.gui.desktop.gui.DownloadError" title="emn_sdk.gui.desktop.gui.DownloadError"><strong>DownloadError</strong></a> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.download_layout">
 <code class="sig-name descname">download_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.download_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.download_layout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create layout of the download page of the User Interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>QGridLayout which houses the layout of the widgets on the download page</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.get_dir">
 <code class="sig-name descname">get_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.get_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.get_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the text of the default path to the previous path used.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.reset_settings">
 <code class="sig-name descname">reset_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.reset_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.reset_settings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Resets the setting to stored values in the default file.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.save_settings">
 <code class="sig-name descname">save_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.save_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.save_settings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves the settings into the config.json file to maintain persistence.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.settings_layout">
 <code class="sig-name descname">settings_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.settings_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.settings_layout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create layout of the settings page of the User Interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>QGridLayout which houses the layout of the widgets on the settings page</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.upload_action">
 <code class="sig-name descname">upload_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.upload_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.upload_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload dataset to CKAN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.ckan.CKANError" title="emn_sdk.io.ckan.CKANError"><strong>CKANError</strong></a> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="emn_sdk.gui.desktop.gui.TabbedUI.upload_layout">
 <code class="sig-name descname">upload_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#TabbedUI.upload_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.TabbedUI.upload_layout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create layout of the upload page of the User Interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>QGridLayout which houses the layout of the widgets on the upload page</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -299,7 +362,13 @@ input directory.</p></li>
 <dl class="function">
 <dt id="emn_sdk.gui.desktop.gui.main">
 <code class="sig-prename descclassname">emn_sdk.gui.desktop.gui.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/emn_sdk/gui/desktop/gui.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.gui.desktop.gui.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Main method to run the User Interface program.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Executed program.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-emn_sdk.gui.desktop">
@@ -312,6 +381,13 @@ input directory.</p></li>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="emn_sdk.gui.html" class="btn btn-neutral float-left" title="emn_sdk.gui package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

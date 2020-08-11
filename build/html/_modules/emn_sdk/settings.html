@@ -162,6 +162,13 @@
 
 
 <div class="viewcode-block" id="checkfile"><a class="viewcode-back" href="../../apidoc/emn_sdk.html#emn_sdk.settings.checkfile">[docs]</a><span class="k">def</span> <span class="nf">checkfile</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Checks if config.json exists, and the path saved in that.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Path to the default path provided by the config.json file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;config.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;default_path&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
@@ -196,7 +203,8 @@
         <span class="s2">&quot;parser_modules&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;spreadsheet&quot;</span><span class="p">:</span> <span class="s2">&quot;emn_sdk.io.parsers.spreadsheet_parser&quot;</span><span class="p">,</span>
             <span class="s2">&quot;sfr&quot;</span><span class="p">:</span> <span class="s2">&quot;emn_sdk.io.parsers.sfr_parser&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;generic&quot;</span><span class="p">:</span> <span class="s2">&quot;emn_sdk.io.parsers.generic_dir_parser&quot;</span>
+            <span class="s2">&quot;generic&quot;</span><span class="p">:</span> <span class="s2">&quot;emn_sdk.io.parsers.generic_dir_parser&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;emn_sdk.io.parsers.batch_parser&quot;</span>
         <span class="p">},</span>
     <span class="p">}</span>
     <span class="n">_keys</span> <span class="o">=</span> <span class="n">_defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>

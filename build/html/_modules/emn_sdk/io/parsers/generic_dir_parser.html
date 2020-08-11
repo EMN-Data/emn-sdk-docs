@@ -163,6 +163,9 @@
 <span class="kn">from</span> <span class="nn">emn_sdk.io.parsers</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">batch_parser</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">model</span>
+<span class="p">)</span>
 
 <div class="viewcode-block" id="Parser"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.parsers.html#emn_sdk.io.parsers.generic_dir_parser.Parser">[docs]</a><span class="k">class</span> <span class="nc">Parser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
     <span class="c1"># def __init__(self, parser_patterns: Dict[str, object]):</span>
@@ -196,18 +199,21 @@
         <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Directory expected for path: </span><span class="si">{path}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">records</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="p">{</span>
+
+        <span class="p">}</span>
         <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="c1"># parser = self._factory.get_parser(fname)</span>
             <span class="n">parser_patterns</span> <span class="o">=</span> <span class="n">glob_patterns</span>
             <span class="n">factory</span> <span class="o">=</span> <span class="n">FilenameParserFactory</span><span class="p">(</span><span class="n">parser_patterns</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">parser</span> <span class="o">=</span> <span class="n">batch_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span>
-            <span class="n">records</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">([</span><span class="n">filename</span><span class="p">])</span>
             <span class="c1"># basedir = os.path.dirname(filename)</span>
             <span class="c1"># other_files = [str(filename)]</span>
             <span class="k">if</span> <span class="n">parser</span><span class="p">:</span>
                 <span class="n">record_list</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">record_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">record_list</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Record</span><span class="p">()</span>
                 <span class="n">records</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)]</span> <span class="o">=</span> <span class="n">record_list</span>
         <span class="k">return</span> <span class="n">records</span></div></div>
 </pre></div>

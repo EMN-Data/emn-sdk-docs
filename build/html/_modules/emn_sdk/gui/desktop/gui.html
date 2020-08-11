@@ -159,21 +159,26 @@
 <span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
 <span class="c1"># third-party</span>
 <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QLabel</span>
 
 <span class="c1"># local package</span>
 <span class="kn">from</span> <span class="nn">emn_sdk.io.ckan</span> <span class="k">import</span> <span class="n">CKAN</span><span class="p">,</span> <span class="n">CKANError</span>
-<span class="kn">import</span> <span class="nn">emn_sdk.io.parser_factory</span> <span class="k">as</span> <span class="nn">parser_factory</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.parser_factory</span> <span class="k">import</span> <span class="n">FilenameParserFactory</span>
 <span class="kn">from</span> <span class="nn">emn_sdk.io.parsers</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">json_parser</span><span class="p">,</span>
     <span class="n">spreadsheet_parser</span><span class="p">,</span>
     <span class="n">batch_parser</span><span class="p">,</span>
     <span class="n">directory_parser</span><span class="p">,</span>
-    <span class="n">patterns</span>
+    <span class="n">patterns</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">emn_sdk.io.parser_factory</span> <span class="k">import</span> <span class="n">FilenameParserFactory</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io</span> <span class="k">import</span> <span class="p">(</span>
+<span class="n">parser_factory</span><span class="p">,</span>
+<span class="n">model</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">emn_sdk.settings</span> <span class="k">import</span> <span class="n">Settings</span>
 
 <span class="c1"># Logger configuration (customize output format)</span>
@@ -201,9 +206,20 @@
 
 <span class="c1"># Classes and functions</span>
 
-
 <div class="viewcode-block" id="Archive"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.Archive">[docs]</a><span class="k">class</span> <span class="nc">Archive</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class used to connect to CKAN, upload, and download datasets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apikey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the Archive object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: URL to connect to CKAN server</span>
+<span class="sd">            apikey: user inputted API key to access particular projects</span>
+<span class="sd">            project: Particular project selected for data download or upload</span>
+<span class="sd">            proxies: optional key for upload/download through proxy servers</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># initial values for params and metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="o">=</span> <span class="n">url</span><span class="p">,</span> <span class="n">apikey</span><span class="p">,</span> <span class="n">project</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_post_kw</span> <span class="o">=</span> <span class="p">{}</span>
@@ -215,16 +231,40 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_parser_factory</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># TODO: use this to pick parser</span>
 
     <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Connect to CKAN.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            CKAN object configured to the unique API key</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Connect to CKAN archive at &#39;</span><span class="si">{self._url}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;API key for CKAN = &#39;</span><span class="si">{self._api_key}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">CKAN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Archive.get_all_projects"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.Archive.get_all_projects">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Get all projects associated with the API key.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary of projects on the API key from CKAN</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Getting list of CKAN projects&quot;</span><span class="p">)</span>
         <span class="n">ckan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">ckan</span><span class="o">.</span><span class="n">get_projects</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Archive.create_dataset"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.Archive.create_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">create_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Create a dataset on CKAN server.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            package_id: name of dataset</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;create_dataset.start: package_id=</span><span class="si">{package_id}</span><span class="s2"> url=</span><span class="si">{self._url}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">ckan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">()</span>
         <span class="c1"># TODO: replace this with user-provided information</span>
@@ -247,29 +287,36 @@
 <span class="sd">            file_or_dir: uploaded file or directory</span>
 <span class="sd">            metadata (dict): Other key/value pairs added to resource metadata</span>
 <span class="sd">            include_source (bool): If true, upload pretty much everything in the</span>
-<span class="sd">                                   input directory.</span>
-<span class="sd">        Returns:</span>
-<span class="sd">            None</span>
+<span class="sd">                                   input directory</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parser_patterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="o">.</span><span class="n">glob_patterns</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">):</span>  <span class="c1"># file</span>
-            <span class="n">factory</span> <span class="o">=</span> <span class="n">parser_factory</span><span class="o">.</span><span class="n">ParserFactory</span><span class="o">.</span><span class="n">from_settings</span><span class="p">(</span><span class="n">Settings</span><span class="p">(</span><span class="n">Settings</span><span class="o">.</span><span class="n">find_settings</span><span class="p">(</span><span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
-            <span class="c1"># if args.data_type is None:  # auto-detect</span>
-            <span class="n">parser_class</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">detect_parser</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)</span>
-            <span class="n">parser</span> <span class="o">=</span> <span class="n">parser_class</span><span class="p">()</span>
-            <span class="n">records</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)</span>
+            <span class="n">factory</span> <span class="o">=</span> <span class="n">FilenameParserFactory</span><span class="p">(</span><span class="n">parser_patterns</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">parser</span> <span class="o">=</span> <span class="n">batch_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span>
+            <span class="n">records</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">([</span><span class="n">file_or_dir</span><span class="p">])</span>
             <span class="n">basedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)</span>
-            <span class="n">other_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)]</span>  <span class="c1"># include source</span>
+            <span class="n">other_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)]</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># directory</span>
             <span class="n">factory</span> <span class="o">=</span> <span class="n">parser_factory</span><span class="o">.</span><span class="n">ParserFactory</span><span class="o">.</span><span class="n">from_settings</span><span class="p">(</span><span class="n">Settings</span><span class="p">(</span><span class="n">Settings</span><span class="o">.</span><span class="n">find_settings</span><span class="p">(</span><span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
             <span class="c1"># if args.data_type is None:  # auto-detect</span>
             <span class="n">parser_class</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">detect_parser</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">parser_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Unable to parse the data provided into a metadata record.&quot;</span><span class="p">)</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Upload Error&quot;</span><span class="p">)</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Critical</span><span class="p">)</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+                <span class="k">return</span>
             <span class="n">parser</span> <span class="o">=</span> <span class="n">parser_class</span><span class="p">()</span>
             <span class="n">records</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)</span>
-            <span class="n">parsed_files</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-            <span class="n">other_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">other_files</span><span class="p">)</span>
+            <span class="c1"># parsed_files = records.keys()</span>
+            <span class="n">other_files</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">directories</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_or_dir</span><span class="p">),</span> <span class="n">topdown</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                    <span class="n">other_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+            <span class="c1"># other_files = [f for f in glob.glob(str(file_or_dir)) if not os.path.isdir(f)]</span>
             <span class="n">basedir</span> <span class="o">=</span> <span class="n">file_or_dir</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">include_source</span><span class="p">:</span>
@@ -280,15 +327,24 @@
             <span class="n">project</span><span class="o">=</span><span class="s2">&quot;api-sandbox&quot;</span><span class="p">,</span> <span class="n">inst</span><span class="o">=</span><span class="s2">&quot;Lawrence Berkeley National Laboratory&quot;</span>
         <span class="p">)</span>
         <span class="n">record_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#fix this records thing, took out records.values()</span>
-        <span class="k">for</span> <span class="n">rval</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
-            <span class="n">record_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rval</span><span class="p">)</span>
+        <span class="c1"># records vs records.values(), if it a string (aka no metadata found), changes to empty records</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">temp_rec</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Record</span><span class="p">()</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+            <span class="n">temp_rec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">add_one</span><span class="p">(</span><span class="s2">&quot;lab&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">temp_rec</span><span class="o">.</span><span class="n">_id</span><span class="p">)</span>
+            <span class="n">record_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_rec</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rval</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rval</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">record_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Record</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">record_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rval</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
             <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;uploading to CKAN: records=</span><span class="si">{record_list}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">ckan</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
             <span class="n">target</span><span class="p">,</span> <span class="n">record_list</span><span class="p">,</span> <span class="n">other_files</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="n">basedir</span><span class="p">,</span> <span class="n">use_existing</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;it went here&#39;</span><span class="p">)</span></div>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Archive.download_dataset"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.Archive.download_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">download_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">ckan_kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Download resources from a dataset from CKAN into a directory.</span>
@@ -313,7 +369,21 @@
 
 
 <div class="viewcode-block" id="TabbedUI"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI">[docs]</a><span class="k">class</span> <span class="nc">TabbedUI</span><span class="p">(</span><span class="n">QTabWidget</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">,</span> <span class="n">combobox</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">settings_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    A class used to display the User Interface.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">,</span> <span class="n">combobox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">settings_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the TabbedUI window for UI interface.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            main_window: QMainWindow used as the base for putting widgets in the class</span>
+<span class="sd">            combobox: QComboBox used to list projects</span>
+<span class="sd">            parent: default parent object to house widgets within a larger window</span>
+<span class="sd">            settings_path: path to config.json file to keep track of settings</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TabbedUI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main_window</span> <span class="o">=</span> <span class="n">main_window</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="n">settings_path</span><span class="p">)</span>
@@ -431,8 +501,13 @@
 
 
     <span class="k">def</span> <span class="nf">_projects_combo_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QComboBox</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Create a combo-box listing projects.</span>
-<span class="sd">        Assumes self._settings and self._projects have already been initialized.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Create a combo-box listing projects. Assumes self._settings and self._projects have already been initialized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QComboBox of projects associated with the API key</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">box</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
         <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_projects</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -442,6 +517,13 @@
         <span class="k">return</span> <span class="n">box</span>
 
 <div class="viewcode-block" id="TabbedUI.upload_layout"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.upload_layout">[docs]</a>    <span class="k">def</span> <span class="nf">upload_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Create layout of the upload page of the User Interface.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QGridLayout which houses the layout of the widgets on the upload page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGridLayout</span><span class="p">()</span>
         <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># data source</span>
@@ -460,6 +542,15 @@
         <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="c1"># radio button</span>
         <span class="k">def</span> <span class="nf">radiobtn</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">btn</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            Function used to choose data source in radio button.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                b: QRadioButton to check if it is clicked</span>
+<span class="sd">                btn: QPushButton used to select data inputs to be uploaded</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">btn</span><span class="o">.</span><span class="n">setParent</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">btn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">btn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s2">&quot;Load dataset from file&quot;</span><span class="p">)</span>
@@ -498,11 +589,16 @@
         <span class="c1"># status/message area</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uploadMessages</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
-
-        <span class="c1"># done</span>
         <span class="k">return</span> <span class="n">layout</span></div>
 
 <div class="viewcode-block" id="TabbedUI.download_layout"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.download_layout">[docs]</a>    <span class="k">def</span> <span class="nf">download_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Create layout of the download page of the User Interface.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QGridLayout which houses the layout of the widgets on the download page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGridLayout</span><span class="p">()</span>
         <span class="c1"># destination directory</span>
@@ -544,6 +640,13 @@
         <span class="k">return</span> <span class="n">layout</span></div>
 
 <div class="viewcode-block" id="TabbedUI.settings_layout"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.settings_layout">[docs]</a>    <span class="k">def</span> <span class="nf">settings_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Create layout of the settings page of the User Interface.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QGridLayout which houses the layout of the widgets on the settings page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGridLayout</span><span class="p">()</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;CKAN URL&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datahubLine</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -559,6 +662,11 @@
         <span class="k">return</span> <span class="n">layout</span></div>
 
 <div class="viewcode-block" id="TabbedUI.get_dir"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.get_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Set the text of the default path to the previous path used.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">default_path</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFileDialog</span><span class="o">.</span><span class="n">getExistingDirectory</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Default path for upload/download&quot;</span>
         <span class="p">)</span>
@@ -599,12 +707,25 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_modal_error</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Error message dialogue.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg: Message to be outputted</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
         <span class="n">m</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Error: </span><span class="si">{msg}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">m</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
 
 <div class="viewcode-block" id="TabbedUI.upload_action"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.upload_action">[docs]</a>    <span class="k">def</span> <span class="nf">upload_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Upload dataset to CKAN.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            CKANError</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># verify inputs</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_projects</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">):</span>
@@ -612,43 +733,12 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">upload_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_modal_error</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;data source </span><span class="si">{upload_path}</span><span class="s2"> is not valid&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">upload_path</span><span class="p">):</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">upload_path</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">,</span> <span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
-                    <span class="n">m</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Single file is not an .xlsx or .csv, so there is no metadata. Please upload a folder with &quot;</span>
-                          <span class="s2">&quot;the file and a valid metadata.xlsx file.&quot;</span><span class="p">)</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Upload Error&quot;</span><span class="p">)</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Critical</span><span class="p">)</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-                    <span class="k">return</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">upload_path</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;metadata.json&quot;</span><span class="p">):</span>
-                    <span class="kc">None</span>
-                <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">upload_path</span><span class="p">)</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="s2">&quot;metadata.csv&quot;</span><span class="p">):</span>
-                    <span class="kc">None</span>
-                <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">upload_path</span><span class="p">)</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="s2">&quot;metadata.xlsx&quot;</span><span class="p">):</span>
-                    <span class="kc">None</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">m</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
-                        <span class="s2">&quot;No metadata file found in folder. Please use the metadata template and insert into the folder&quot;</span>
-                        <span class="s2">&quot;before uploading.&quot;</span><span class="p">)</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Upload Error&quot;</span><span class="p">)</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Critical</span><span class="p">)</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-                    <span class="k">return</span>
             <span class="n">ds_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uploadDataTarget</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">ds_name</span><span class="p">):</span>
-                <span class="n">m</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
-                <span class="n">m</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Incorrect formatting for name of dataset. Please note spaces are not allowed.&quot;</span><span class="p">)</span>
-                <span class="n">m</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Upload Error&quot;</span><span class="p">)</span>
-                <span class="n">m</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Critical</span><span class="p">)</span>
-                <span class="n">m</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-                <span class="k">return</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">default_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uploadDataSource</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">ds_name</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_modal_error</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;must select a target dataset&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
             <span class="c1"># perform upload</span>
             <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="n">add_to_existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uploadAddFlag</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
@@ -678,10 +768,16 @@
             <span class="p">)</span>
             <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_log</span><span class="p">)</span>
             <span class="n">upload_message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Uploaded </span><span class="si">{n}</span><span class="s2"> file{&#39;s&#39; if n &gt; 1 else &#39;&#39;}&quot;</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">upload_path</span><span class="p">):</span>
+                <span class="n">upload_message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Uploaded </span><span class="si">{n}</span><span class="s2"> folder{&#39;s&#39; if n &gt; 1 else &#39;&#39;}&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">uploadMessages</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">upload_message</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TabbedUI.download_action"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.download_action">[docs]</a>    <span class="k">def</span> <span class="nf">download_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Download dataset resources from CKAN.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            DownloadError</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_projects</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">):</span>
             <span class="n">ds_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downloadDataTarget</span><span class="o">.</span><span class="n">text</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -704,7 +800,7 @@
             <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">nfiles</span><span class="p">,</span> <span class="n">nbytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">download_dataset</span><span class="p">(</span>
-                    <span class="n">project</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">ds_id</span><span class="p">,</span> <span class="n">dest_dir</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="n">project</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">ds_id</span><span class="p">,</span> <span class="n">dest_dir</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">downloadOverwriteFlag</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
                 <span class="p">)</span>
             <span class="k">except</span> <span class="n">DownloadError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="n">m</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
@@ -729,6 +825,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">downloadMessages</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TabbedUI.reset_settings"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.reset_settings">[docs]</a>    <span class="k">def</span> <span class="nf">reset_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Resets the setting to stored values in the default file.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Reset settings to stored values: </span><span class="si">{self._settings._data}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahubLine</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">ckan_url</span><span class="p">)</span>
         <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;set apiKey to </span><span class="si">{self._settings.api_key}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -737,6 +839,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">settingsDefaultPathLbl</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">default_path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TabbedUI.save_settings"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.TabbedUI.save_settings">[docs]</a>    <span class="k">def</span> <span class="nf">save_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Saves the settings into the config.json file to maintain persistence.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apikeyLine</span><span class="o">.</span><span class="n">hasAcceptableInput</span><span class="p">():</span>
             <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Save settings&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">ckan_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datahubLine</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
@@ -765,6 +872,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">downloadMessages</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Incorrect format for API Key.&quot;</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.gui.desktop.html#emn_sdk.gui.desktop.gui.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Main method to run the User Interface program.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Executed program.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Starting GUI&quot;</span><span class="p">)</span>
     <span class="c1"># auto-scale the fonts, etc.</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;QT_AUTO_SCREEN_SCALE_FACTOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>

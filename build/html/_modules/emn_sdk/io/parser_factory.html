@@ -264,7 +264,7 @@
 
 <div class="viewcode-block" id="ParserFactory.detect_parser"><a class="viewcode-back" href="../../../apidoc/emn_sdk.io.html#emn_sdk.io.parser_factory.ParserFactory.detect_parser">[docs]</a>    <span class="k">def</span> <span class="nf">detect_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parsers</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parsers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">matcher</span><span class="p">,</span> <span class="n">parser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parsers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">matcher</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="n">parser</span>
