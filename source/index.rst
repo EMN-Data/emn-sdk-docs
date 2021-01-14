@@ -8,6 +8,7 @@ Energy Materials Network Software Development Kit (EMN-SDK)
    design
    Modules <apidoc/modules>
    how-to-use
+   programmer-guide
 
 Indices and tables
 ==================
