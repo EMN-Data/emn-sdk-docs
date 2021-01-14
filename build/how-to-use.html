@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How To Use &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="emn_sdk.gui.desktop package" href="apidoc/emn_sdk.gui.desktop.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc/modules.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How To Use</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#download-the-uploader">Download the Uploader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-uploader">Setting up the Uploader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upload-a-file-or-directory">Upload a file or directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-a-dataset">Download a dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-the-data-hub">Accessing the Data Hub</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>How To Use</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/how-to-use.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-use">
+<h1>How To Use<a class="headerlink" href="#how-to-use" title="Permalink to this headline">¶</a></h1>
+<p>This page describes step-by-step methods to use the uploader and data hub.</p>
+<div class="section" id="download-the-uploader">
+<h2>Download the Uploader<a class="headerlink" href="#download-the-uploader" title="Permalink to this headline">¶</a></h2>
+<p>The uploader is a program to be downloaded as a package onto your computer. For Mac OS and Linux, the uploader can be downloaded through the terminal. Open a terminal window. In order for the proper dependencies to be installed, the python package pip must be installed. To check if this is already installed, type the command
+<cite>pip –version</cite>, and if pip shows to have a version, then it exists. If not, download a Python pacakge from <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a>, which automatically installs pip.</p>
+<p>Another option is creating a virtual environment with a virtual environment like Conda from <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installing-conda-on-a-system-that-has-other-python-installations-or-packages">https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#installing-conda-on-a-system-that-has-other-python-installations-or-packages</a>. Run the below code in the terminal afterwards to download pip using a virtual environment from conda:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">emntest</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">emntest</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">pip</span>
+</pre></div>
+</div>
+<p>After this, use pip to install the uploader and its dependencies with the following code. This installs the uploader to be used with the terminal.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">emn</span><span class="o">-</span><span class="n">sdk</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">pyqt5</span>
+</pre></div>
+</div>
+<p>After this, one can open a terminal and open the uploader at any point with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">emn</span> <span class="n">ui</span>
+</pre></div>
+</div>
+<p>For any further updates to the uploader that affects the project or lab one is working on, use the following command after an update to the uploader is confirmed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">emn</span><span class="o">-</span><span class="n">sdk</span>
+</pre></div>
+</div>
+<p>For Windows operating system, simply download the uploader at this link for the most recent copy of the uploader and click it to open the uploader: _
+For updates for the uploader for a particular lab or project parser, simply delete the previous copy and download from the link again to have the most updated version.</p>
+</div>
+<div class="section" id="setting-up-the-uploader">
+<h2>Setting up the Uploader<a class="headerlink" href="#setting-up-the-uploader" title="Permalink to this headline">¶</a></h2>
+<p>Now that the uploader is on the computer, there are steps to configure it to securely access projects. This is done by a unique API key. Obtain this from contacting a lab representative
+or visiting <a class="reference external" href="https://datahub.h2awsm.org/">https://datahub.h2awsm.org/</a> after one obtains an EMN account. Once logged in, press your name in the top right corner and scroll down. On the left side, there should be an API Key available as a character of strings and numbers. Copy this key to be pasted into the uploader.</p>
+<p>Now, open the uploader. There should be three tab visible, ‘Upload’ (default tab), ‘Download’, and ‘Settings’. Navigate to the Settings tab. Confirm that the CKAN URL is <a class="reference external" href="https://datahub.h2awsm.org">https://datahub.h2awsm.org</a> unless your lab has specified otherwise.
+Paste the API key that was copied into the next text box, and press Save. One may also configure a default path that the Upload and Download tabs will use to find files to upload/download.</p>
+<img alt="Settings tab on uploader" src="_images/screenshot1.png" />
+<p>Restart the uploader, and confirm that in the Upload and Download tabs in the drop-down panel labeled ‘Project’ there are accessible projects. As such, the uploader is now configured to access those projects. If one needs to change API key, simply follow the instructions above with the new API key.</p>
+</div>
+<div class="section" id="upload-a-file-or-directory">
+<h2>Upload a file or directory<a class="headerlink" href="#upload-a-file-or-directory" title="Permalink to this headline">¶</a></h2>
+<p>Verify that the project that you want to upload to is selected by using the drop-down menu.
+Select whether the upload is going to be a single file or a directory (folder) by selecting ‘File’ or ‘Folder’.
+Next, select the file/folder to be downloaded by pressing the button to the right of the text box labeled ‘Source’. This will ensure that everything that is selected is uploaded. Please note that nested folders (folder inside another folder) currently does not function, so please select one folder with only files inside.</p>
+<p>Now, give a name to the dataset that you are going to upload. The name must only be alphanumeric characters or the following characters: “-_”. An error will output if the dataset does not follow that format or if the name already exists in the project.</p>
+<p>However, one can also add more data to an existing dataset. If this is the case, select the checkbox ‘Add to existing dataset’ and type in the name of the dataset to which the data is added to.</p>
+<p>Press the ‘Upload’ button, and confirm that a message appears that your folder or file has been uploaded. Please note that there may be a slight delay in uploading the files that may cause the program to say ‘Not responding’, but if no error message has popped up, one can assume that the files just take time to upload.</p>
+<img alt="Upload tab on uploader" src="_images/screenshot2.png" />
+</div>
+<div class="section" id="download-a-dataset">
+<h2>Download a dataset<a class="headerlink" href="#download-a-dataset" title="Permalink to this headline">¶</a></h2>
+<p>To download a file, navigate to the Download tab of the uploader. Select the destination that the dataset should be downloaded to by selecting a path after pressing the button to the right of the text box labeled ‘Destination’.
+Next, if one desires the data to be outputted in a folder instead of all the files, select the checkbox for ‘Create sub-folder’. If there already exists files with the same name in the destination folder that you want to be overwritten with the new files, select the checkbox for the ‘Overwrite’ option.</p>
+<p>Confirm that the correct project is selected and then type in the exact name of the dataset to be downloaded. An error will output if there exists no dataset with that name.</p>
+<p>Press the ‘Download’ button, and confirm that a message appears that the dataset has been downloaded.  Please note that there may be a slight delay in downloading the files that may cause the program to say ‘Not responding’, but if no error message has popped up, one can assume that the files just take time to download.</p>
+<img alt="Download tab on uploader" src="_images/screenshot3.png" />
+</div>
+<div class="section" id="accessing-the-data-hub">
+<h2>Accessing the Data Hub<a class="headerlink" href="#accessing-the-data-hub" title="Permalink to this headline">¶</a></h2>
+<p>To view datasets and projects, open a browser and go to <a class="reference external" href="https://datahub.h2awsm.org/">https://datahub.h2awsm.org/</a>. Once logged in with an EMN account, press ‘Projects’, and then ‘My Projects’ to view the projects one is registered to. Select the project to be viewed and select ‘Datasets’ to navigate through uploaded datasets. One may search through the datasets, sort or filter them, view and download particular files in each dataset, or edit the metadata to be searched on.</p>
+<img alt="Datasets on the data hub examples" src="_images/screenshot4.png" />
+<p>Any additional questions can be sent to _.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="apidoc/emn_sdk.gui.desktop.html" class="btn btn-neutral float-left" title="emn_sdk.gui.desktop package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

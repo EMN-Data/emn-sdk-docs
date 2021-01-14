@@ -1,0 +1,846 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.parsers package &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="emn_sdk.io.parsers.tests package" href="emn_sdk.io.parsers.tests.html" />
+    <link rel="prev" title="emn_sdk.io package" href="emn_sdk.io.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="emn_sdk.html">emn_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="emn_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.command.html">emn_sdk.command package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="emn_sdk.io.html">emn_sdk.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.gui.html">emn_sdk.gui package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk.settings">emn_sdk.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to-use.html">How To Use</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">emn_sdk</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.html">emn_sdk package</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.io.html">emn_sdk.io package</a> &raquo;</li>
+        
+      <li>emn_sdk.io.parsers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/apidoc/emn_sdk.io.parsers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="emn-sdk-io-parsers-package">
+<h1>emn_sdk.io.parsers package<a class="headerlink" href="#emn-sdk-io-parsers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="emn_sdk.io.parsers.tests.html">emn_sdk.io.parsers.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html">emn_sdk.io.parsers.tests.testdata package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows.html">emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows.html#module-emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html#module-emn_sdk.io.parsers.tests.testdata">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.data">emn_sdk.io.parsers.tests.data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_directoryparser">emn_sdk.io.parsers.tests.test_directoryparser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_examples">emn_sdk.io.parsers.tests.test_examples module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_jsonparser">emn_sdk.io.parsers.tests.test_jsonparser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_sfrparser">emn_sdk.io.parsers.tests.test_sfrparser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_spreadsheetparser">emn_sdk.io.parsers.tests.test_spreadsheetparser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.util">emn_sdk.io.parsers.tests.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.batch_parser">
+<span id="emn-sdk-io-parsers-batch-parser-module"></span><h2>emn_sdk.io.parsers.batch_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.batch_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parse a directory containing some combination of files handled
+by given (other) parsers.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.batch_parser.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.batch_parser.</code><code class="sig-name descname">Parser</code><span class="sig-paren">(</span><em class="sig-param">factory: emn_sdk.io.parser_factory.BaseParserFactory</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/batch_parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.batch_parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.batch_parser.Parser.match">
+<em class="property">static </em><code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/parsers/batch_parser.html#Parser.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.batch_parser.Parser.match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.batch_parser.Parser.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Directory-parser'</em><a class="headerlink" href="#emn_sdk.io.parsers.batch_parser.Parser.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.batch_parser.Parser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">files: List[str]</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../_modules/emn_sdk/io/parsers/batch_parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.batch_parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse all the files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>files</strong> – List of file names</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Raise:</dt><dd><p>KeyError: If any of the files matches multiple patterns</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Mapping with key being filename and value being LIST of parsed records</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.directory_parser">
+<span id="emn-sdk-io-parsers-directory-parser-module"></span><h2>emn_sdk.io.parsers.directory_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.directory_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parse a directory containing some combination of files handled
+by given (other) parsers.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.directory_parser.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.directory_parser.</code><code class="sig-name descname">Parser</code><span class="sig-paren">(</span><em class="sig-param">parser_patterns: Dict[str, object]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/directory_parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.directory_parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.directory_parser.Parser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../_modules/emn_sdk/io/parsers/directory_parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.directory_parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Parse all the files in the given directory. Does <em>not</em> look into</dt><dd><p>sub-directories.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – Path to a directory.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Raise:</dt><dd><p>ValueError: if provided directory isn’t a directory
+KeyError: If any of the files matches multiple glob patterns</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Mapping with key being filename and value being LIST of parsed records</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.generic_dir_parser">
+<span id="emn-sdk-io-parsers-generic-dir-parser-module"></span><h2>emn_sdk.io.parsers.generic_dir_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.generic_dir_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parse a directory containing some combination of files handled
+by given (other) parsers.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.generic_dir_parser.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.generic_dir_parser.</code><code class="sig-name descname">Parser</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/generic_dir_parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.generic_dir_parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.generic_dir_parser.Parser.match">
+<em class="property">static </em><code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/parsers/generic_dir_parser.html#Parser.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.generic_dir_parser.Parser.match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.generic_dir_parser.Parser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../_modules/emn_sdk/io/parsers/generic_dir_parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.generic_dir_parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Parse all the files in the given directory. Does <em>not</em> look into</dt><dd><p>sub-directories.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – Path to a directory.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Raise:</dt><dd><p>ValueError: if provided directory isn’t a directory
+KeyError: If any of the files matches multiple glob patterns</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Mapping with key being filename and value being LIST of parsed records</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.json_parser">
+<span id="emn-sdk-io-parsers-json-parser-module"></span><h2>emn_sdk.io.parsers.json_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.json_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parse serialized Record as JSON</p>
+<p>Note that all of the work of this module is really
+in the <cite>io.model</cite> module.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.json_parser.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.json_parser.</code><code class="sig-name descname">Parser</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/json_parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.json_parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.json_parser.Parser.name">
+<code class="sig-name descname">name</code><em class="property"> = 'JSON parser'</em><a class="headerlink" href="#emn_sdk.io.parsers.json_parser.Parser.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.json_parser.Parser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">require_files=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/json_parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.json_parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Path to input JSON file.</p></li>
+<li><p><strong>require_files</strong> – If True (default), files mentioned in the JSON must exist.
+Otherwise this will not be checked.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>IOError</strong> – If <cite>require_files</cite> is True and any of the files is missing.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.matrix_blocks">
+<span id="emn-sdk-io-parsers-matrix-blocks-module"></span><h2>emn_sdk.io.parsers.matrix_blocks module<a class="headerlink" href="#module-emn_sdk.io.parsers.matrix_blocks" title="Permalink to this headline">¶</a></h2>
+<p>Parse a matrix of values into metadata and data block(s).
+The values are fed into the algorithm one row at a time,
+as, e.g., from a CSV file.</p>
+<p>This is a utility module that will be used by spreadsheet/csv parsers.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.matrix_blocks.Block">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.matrix_blocks.</code><code class="sig-name descname">Block</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#Block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.Block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.Block.active">
+<em class="property">property </em><code class="sig-name descname">active</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.Block.active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.Block.block_type">
+<em class="property">property </em><code class="sig-name descname">block_type</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.Block.block_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.Block.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#Block.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.Block.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.Block.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.Block.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.Block.incomplete">
+<code class="sig-name descname">incomplete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#Block.incomplete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.Block.incomplete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parsers.matrix_blocks.DataBlock">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.matrix_blocks.</code><code class="sig-name descname">DataBlock</code><span class="sig-paren">(</span><em class="sig-param">row</em>, <em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#DataBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.DataBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.parsers.matrix_blocks.Block" title="emn_sdk.io.parsers.matrix_blocks.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parsers.matrix_blocks.Block</span></code></a></p>
+<p>A block for data, which differs from key/value blocks.</p>
+<dl class="simple">
+<dt>Expected format:</dt><dd><p>row 1:     ‘Data[:&lt;name&gt;]’, &lt;other columns ignored&gt;
+row 2:     ‘&lt;unit&gt;’, ‘&lt;unit&gt;’, .. , &lt;blank&gt;
+row 3..N:  value   , value   , ..</p>
+</dd>
+</dl>
+<p>The number of columns in the block is determined by how
+many non-empty “units” columns there are under the header (first) row.</p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.DataBlock.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">row</em>, <em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#DataBlock.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.DataBlock.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.DataBlock.block_type">
+<em class="property">property </em><code class="sig-name descname">block_type</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.DataBlock.block_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append name to block type so that blocks with different
+names are not merged together (which would make no sense).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.DataBlock.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.DataBlock.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parsers.matrix_blocks.KeyValueBlock">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.matrix_blocks.</code><code class="sig-name descname">KeyValueBlock</code><span class="sig-paren">(</span><em class="sig-param">row</em>, <em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#KeyValueBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.KeyValueBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.parsers.matrix_blocks.Block" title="emn_sdk.io.parsers.matrix_blocks.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parsers.matrix_blocks.Block</span></code></a></p>
+<p>A block for metadata, as key/value pairs.</p>
+<dl class="simple">
+<dt>Expected format:</dt><dd><p>row 1:    ‘&lt;Type&gt;[:&lt;subtype&gt;]’, &lt;ignored&gt;
+row 2..N: &lt;key&gt;, &lt;value&gt;</p>
+</dd>
+</dl>
+<p>The “:subtype” is optional, and may be any alphanumeric
+sequence (with dash or underscores). The “type” must
+match a known metadata category. The value of &lt;subtype&gt;
+will be pre-pended to all the &lt;key&gt;s in the block.</p>
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.TYPE_DELIM">
+<code class="sig-name descname">TYPE_DELIM</code><em class="property"> = '.'</em><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.TYPE_DELIM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">row</em>, <em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#KeyValueBlock.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.block_type">
+<em class="property">property </em><code class="sig-name descname">block_type</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.block_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.merge_data">
+<code class="sig-name descname">merge_data</code><span class="sig-paren">(</span><em class="sig-param">block</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#KeyValueBlock.merge_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.KeyValueBlock.merge_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge block data. This removes the subtype.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.matrix_blocks.</code><code class="sig-name descname">MatrixParser</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#MatrixParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParser.DATA_HEADER_RE">
+<code class="sig-name descname">DATA_HEADER_RE</code><em class="property"> = re.compile('\\s*[Dd]ata(:([\\w\\-_]+))?\\s*$')</em><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParser.DATA_HEADER_RE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParser.HEADER_RE">
+<code class="sig-name descname">HEADER_RE</code><em class="property"> = re.compile('\\s*([Ll]ab|[Ee]xperiment|[Mm]easurement|[Ss]ample|[Ss]earch[Dd]ata|[Dd]ata)(:(\\w|-_)+)?\\s*$')</em><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParser.HEADER_RE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParser.SEARCH_DATA_RE">
+<code class="sig-name descname">SEARCH_DATA_RE</code><em class="property"> = re.compile('\\s*[Ss]earch[Dd]ata(:([\\w\\-_]+))?\\s*$')</em><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParser.SEARCH_DATA_RE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParser.blocks">
+<em class="property">property </em><code class="sig-name descname">blocks</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParser.blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return parsed blocks.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParser.row">
+<code class="sig-name descname">row</code><span class="sig-paren">(</span><em class="sig-param">row</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#MatrixParser.row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParser.row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process next row of data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="emn_sdk.io.parsers.matrix_blocks.MatrixParserError">
+<em class="property">exception </em><code class="sig-prename descclassname">emn_sdk.io.parsers.matrix_blocks.</code><code class="sig-name descname">MatrixParserError</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#MatrixParserError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.MatrixParserError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parsers.matrix_blocks.SearchDataBlock">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.matrix_blocks.</code><code class="sig-name descname">SearchDataBlock</code><span class="sig-paren">(</span><em class="sig-param">row</em>, <em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#SearchDataBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.SearchDataBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.parsers.matrix_blocks.KeyValueBlock" title="emn_sdk.io.parsers.matrix_blocks.KeyValueBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parsers.matrix_blocks.KeyValueBlock</span></code></a></p>
+<p>SearchData blocks are like metadata Key/Value blocks, except the subtype
+is not automatically prepended to keys, and instead just available as a separate attribute.</p>
+<p>Also, there is no <cite>merge_data()</cite> method, because you can only have one SearchData block for
+a given subtype (“SearchData:Alligator”, “SearchData:Bear”, are both ok, but you can’t have
+two “SearchData:Alligator” sections in the same input matrix).</p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.SearchDataBlock.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">row</em>, <em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/matrix_blocks.html#SearchDataBlock.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.SearchDataBlock.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.matrix_blocks.SearchDataBlock.block_subtype">
+<em class="property">property </em><code class="sig-name descname">block_subtype</code><a class="headerlink" href="#emn_sdk.io.parsers.matrix_blocks.SearchDataBlock.block_subtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.pandas_parser">
+<span id="emn-sdk-io-parsers-pandas-parser-module"></span><h2>emn_sdk.io.parsers.pandas_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.pandas_parser" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.patterns">
+<span id="emn-sdk-io-parsers-patterns-module"></span><h2>emn_sdk.io.parsers.patterns module<a class="headerlink" href="#module-emn_sdk.io.parsers.patterns" title="Permalink to this headline">¶</a></h2>
+<p>Parser / file matching patterns</p>
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.sfr_parser">
+<span id="emn-sdk-io-parsers-sfr-parser-module"></span><h2>emn_sdk.io.parsers.sfr_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.sfr_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parse data from SFR experiments.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.sfr_parser.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">Parser</code><span class="sig-paren">(</span><em class="sig-param">inline_data: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<p>Parse  files in a STCH experiment, and add the data and
+metadata to a given Record</p>
+<dl class="simple">
+<dt>There should be a list of files:</dt><dd><ul class="simple">
+<li><p>Mdata&lt;NN&gt;.txt</p></li>
+<li><p>DAC&lt;NN&gt;.txt</p></li>
+<li><p>POX&lt;NN&gt;.txt</p></li>
+<li><p>STAT&lt;NN&gt;.txt</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.sfr_parser.Parser.DATA_FILE_NAME">
+<code class="sig-name descname">DATA_FILE_NAME</code><em class="property"> = 'Data{num}.csv'</em><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.Parser.DATA_FILE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.sfr_parser.Parser.match">
+<em class="property">static </em><code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#Parser.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.Parser.match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.sfr_parser.Parser.name">
+<code class="sig-name descname">name</code><em class="property"> = 'SFR directory parser'</em><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.Parser.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.sfr_parser.Parser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path: Union[pathlib.Path, str]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert raw data and return as records.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parsers.sfr_parser.StchDirectoryMatcher">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">StchDirectoryMatcher</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#StchDirectoryMatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.StchDirectoryMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.sfr_parser.StchDirectoryMatcher.match">
+<em class="property">static </em><code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">directory</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#StchDirectoryMatcher.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.StchDirectoryMatcher.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match a directory of STCH data.</p>
+<p>Expect the following glob patterns to be present:</p>
+<ul class="simple">
+<li><p>Mdata??.txt</p></li>
+<li><p>DAC??.txt</p></li>
+<li><p>POX??.txt</p></li>
+<li><p>STAT??.txt</p></li>
+</ul>
+<p>There should be the same number of each file type (pattern).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.create_exp_data">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">create_exp_data</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em>, <em class="sig-param">exp_name</em>, <em class="sig-param">zeroPointTime</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#create_exp_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.create_exp_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert data arrays to a datatable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>zeroPointTime</strong> (<em>int</em>) – start time of the experiment in absolute seconds</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>system reading data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(pandas DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.create_ms_data">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">create_ms_data</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em>, <em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#create_ms_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.create_ms_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read mass spectrometry data from Merlin TXT file into a datatable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the mass spectrometry data
+zeroPointTime: start of MS collection
+date of MS collection</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>msData (pandas DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.create_stat_data">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">create_stat_data</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em>, <em class="sig-param">exp_num</em>, <em class="sig-param">time_arr</em>, <em class="sig-param">collect_date</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#create_stat_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.create_stat_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract additional system settings to a datatable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time array and collection date of the experiment</strong> (<em>epoch</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>stat_dict and meta data dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.get_epoch_time">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">get_epoch_time</code><span class="sig-paren">(</span><em class="sig-param">datestr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#get_epoch_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.get_epoch_time" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Convert a date - time string to seconds elapsed since</dt><dd><p>Jan 1, 1970 00:00:00 UTC and a formatted date string</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>datestr</strong> – Input time string</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>zerpoint time (epoch time of first data point) and collection date</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.interp_data">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">interp_data</code><span class="sig-paren">(</span><em class="sig-param">xvals: List[float], data: pandas.core.frame.DataFrame</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#interp_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.interp_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate data to match the mass spec time stamps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xvals</strong> – mass spec time in seconds</p></li>
+<li><p><strong>data</strong> – data to interpolate</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>keys are settings/column names; values are 1D arrays</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.merge_dict">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">merge_dict</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#merge_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.merge_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge multiple dicts and DataTables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – data streams to convert</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>merged dictionary with one time column</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>datadict (dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.sfr_parser.timed">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.sfr_parser.</code><code class="sig-name descname">timed</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/sfr_parser.html#timed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.sfr_parser.timed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.spreadsheet_parser">
+<span id="emn-sdk-io-parsers-spreadsheet-parser-module"></span><h2>emn_sdk.io.parsers.spreadsheet_parser module<a class="headerlink" href="#module-emn_sdk.io.parsers.spreadsheet_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parser for spreadsheets, Excel or CSV.</p>
+<p>Handles multiple spreadsheets in a single Excel file.
+Also should provide decent error reporting, etc.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.spreadsheet_parser.</code><code class="sig-name descname">Parser</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser.DERIVED_DATA">
+<code class="sig-name descname">DERIVED_DATA</code><em class="property"> = 'searchdata'</em><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser.DERIVED_DATA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser.match">
+<em class="property">static </em><code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#Parser.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser.match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Spreadsheet parser'</em><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a <cite>path</cite>, which can be a file or a directory,
+and return a list of records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – file or directory</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of records (data and associated metadata)</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.UnknownFileType" title="emn_sdk.io.parser.UnknownFileType"><strong>UnknownFileType</strong></a> – if path leads to a file that
+    is not known, and parser is expected to parse it
+    instead of just ignoring it.</p></li>
+<li><p><a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.ParseError" title="emn_sdk.io.parser.ParseError"><strong>ParseError</strong></a> – if there is some problem processing input data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser.parse_rows">
+<em class="property">static </em><code class="sig-name descname">parse_rows</code><span class="sig-paren">(</span><em class="sig-param">rows</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.model.Record<a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#Parser.parse_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser.parse_rows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.Parser.parse_str">
+<code class="sig-name descname">parse_str</code><span class="sig-paren">(</span><em class="sig-param">strdata: str</em>, <em class="sig-param">sep: str = '\n'</em><span class="sig-paren">)</span> &#x2192; List[emn_sdk.io.model.Record]<a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#Parser.parse_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.Parser.parse_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.cleanstr">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.spreadsheet_parser.</code><code class="sig-name descname">cleanstr</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#cleanstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.cleanstr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.infer_data_types">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.spreadsheet_parser.</code><code class="sig-name descname">infer_data_types</code><span class="sig-paren">(</span><em class="sig-param">values: List</em><span class="sig-paren">)</span> &#x2192; List<a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#infer_data_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.infer_data_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infer data types from values.</p>
+<p>Return list with type of each value s.t. one can call <cite>result[i](value)</cite>
+to convert any subsequent values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.spreadsheet_parser.split_units">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.spreadsheet_parser.</code><code class="sig-name descname">split_units</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/spreadsheet_parser.html#split_units"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.spreadsheet_parser.split_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split out ‘Foo (units^2) into (‘Foo’, ‘units^2’)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-emn_sdk.io.parsers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="emn_sdk.io.parsers.tests.html" class="btn btn-neutral float-right" title="emn_sdk.io.parsers.tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="emn_sdk.io.html" class="btn btn-neutral float-left" title="emn_sdk.io package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

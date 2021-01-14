@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.tests.test_record_vocab &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../how-to-use.html">How To Use</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>emn_sdk.io.tests.test_record_vocab</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for emn_sdk.io.tests.test_record_vocab</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Tests for `record_vocab` module.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># stdlib</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1"># third-party</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="c1"># package</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.record_schema</span> <span class="k">import</span> <span class="n">SCHEMA</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.model</span> <span class="k">import</span> <span class="n">Metadata</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.record_vocab</span> <span class="k">import</span> <span class="n">Vocabulary</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io</span> <span class="k">import</span> <span class="n">validation</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">ckan_info</span><span class="p">,</span> <span class="n">CKANInfo</span>
+
+<span class="c1"># set up logging</span>
+<span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">minimal_record</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;72cc11a1-324c-49cd-bf11-083b6acd0571&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lab&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;experiment&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;measurement&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;tabular&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+<span class="p">}</span>
+
+<span class="n">spec1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">,</span> <span class="s2">&quot;VIR&quot;</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">]}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">spec3</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">,</span> <span class="s2">&quot;VIR&quot;</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">]}</span>
+    <span class="p">],</span>
+    <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_LAB</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;lab&quot;</span><span class="p">,</span> <span class="s2">&quot;LBNL&quot;</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;coffee_roast&quot;</span><span class="p">,</span> <span class="s2">&quot;beer_style&quot;</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;lab&quot;</span><span class="p">,</span> <span class="s2">&quot;ANL&quot;</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pizza_thickness&quot;</span><span class="p">]},</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">spec_complex</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">,</span> <span class="s2">&quot;VIR&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Pt/C&quot;</span><span class="p">,</span> <span class="s2">&quot;Au/C&quot;</span><span class="p">,</span> <span class="s2">&quot;Hg/C&quot;</span><span class="p">]})</span>
+            <span class="p">],</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="test_schemacopy"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_schemacopy">[docs]</a><span class="k">def</span> <span class="nf">test_schemacopy</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="p">(</span><span class="n">spec1</span><span class="p">)</span>
+    <span class="n">sch</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">SCHEMA</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">sch</span> <span class="o">!=</span> <span class="n">SCHEMA</span></div>
+
+
+<div class="viewcode-block" id="test_nochange"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_nochange">[docs]</a><span class="k">def</span> <span class="nf">test_nochange</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="p">(</span><span class="n">spec1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">SCHEMA</span><span class="p">)</span>
+        <span class="n">sch_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">sch</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Schema :: </span><span class="se">\n</span><span class="si">{sch_str}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># check without extra prop</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">minimal_record</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failure: </span><span class="si">{failure}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="test_one"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_one">[docs]</a><span class="k">def</span> <span class="nf">test_one</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="p">(</span><span class="n">spec1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">SCHEMA</span><span class="p">)</span>
+        <span class="n">sch_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">sch</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Schema :: </span><span class="se">\n</span><span class="si">{sch_str}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">minimal_record</span><span class="p">)</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span>
+
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">minimal_record</span><span class="p">)</span>
+    <span class="n">msr_meta</span> <span class="o">=</span> <span class="n">rec</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">]</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span> <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">:</span> <span class="s2">&quot;Pt/C&quot;</span><span class="p">}</span>
+    <span class="n">msr_meta</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">values</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+        <span class="n">rec_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Record :: </span><span class="se">\n</span><span class="si">{rec_str}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failure: </span><span class="si">{failure}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="test_multi"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_multi">[docs]</a><span class="k">def</span> <span class="nf">test_multi</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="p">(</span><span class="n">spec3</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">SCHEMA</span><span class="p">)</span>
+        <span class="n">sch_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">sch</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Schema :: </span><span class="se">\n</span><span class="si">{sch_str}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">values</span><span class="p">,</span> <span class="n">expect_failure</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">:</span> <span class="s2">&quot;Pt/C&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="kc">False</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">:</span> <span class="s2">&quot;Pt/C&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_LAB</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lab&quot;</span><span class="p">:</span> <span class="s2">&quot;LBNL&quot;</span><span class="p">},</span>
+            <span class="p">},</span>
+            <span class="kc">True</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">:</span> <span class="s2">&quot;Pt/C&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_LAB</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;lab&quot;</span><span class="p">:</span> <span class="s2">&quot;LBNL&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;coffee_roast&quot;</span><span class="p">:</span> <span class="s2">&quot;dark&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;beer_style&quot;</span><span class="p">:</span> <span class="s2">&quot;IPA&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="kc">False</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;wackadoodle&quot;</span><span class="p">},</span>
+                <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_LAB</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;lab&quot;</span><span class="p">:</span> <span class="s2">&quot;LBNL&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;coffee_roast&quot;</span><span class="p">:</span> <span class="s2">&quot;dark&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;beer_style&quot;</span><span class="p">:</span> <span class="s2">&quot;IPA&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="kc">False</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">):</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">minimal_record</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">lvl</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">rec</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="n">lvl</span><span class="p">]</span>
+            <span class="n">meta</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">vals</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">rec_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Record :: </span><span class="se">\n</span><span class="si">{rec_str}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">expect_failure</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+                <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failure: </span><span class="si">{failure}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="test_complex"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_complex">[docs]</a><span class="k">def</span> <span class="nf">test_complex</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="p">(</span><span class="n">spec_complex</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">SCHEMA</span><span class="p">)</span>
+        <span class="n">sch_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">sch</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Schema :: </span><span class="se">\n</span><span class="si">{sch_str}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">minimal_record</span><span class="p">)</span>
+    <span class="n">msr_meta</span> <span class="o">=</span> <span class="n">rec</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">]</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span> <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">:</span> <span class="s2">&quot;Pt/C&quot;</span><span class="p">}</span>
+    <span class="n">msr_meta</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">values</span><span class="p">})</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failure: </span><span class="si">{failure}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span>
+
+    <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;measurement_type&quot;</span><span class="p">:</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span> <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">:</span> <span class="s2">&quot;O/C&quot;</span><span class="p">}</span>
+    <span class="n">msr_meta</span> <span class="o">=</span> <span class="n">rec</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">]</span>
+    <span class="n">msr_meta</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">values</span><span class="p">})</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="test_from_table"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_from_table">[docs]</a><span class="k">def</span> <span class="nf">test_from_table</span><span class="p">():</span>
+    <span class="c1"># spec1 in table form</span>
+    <span class="n">table_spec</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;require&quot;</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">,</span> <span class="s2">&quot;measurement_type&quot;</span><span class="p">,</span> <span class="s2">&quot;VIR&quot;</span><span class="p">,</span> <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_table</span><span class="p">(</span><span class="n">table_spec</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">v</span><span class="o">.</span><span class="n">specification</span> <span class="o">==</span> <span class="n">spec1</span></div>
+
+
+<div class="viewcode-block" id="test_from_table_repeated"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_from_table_repeated">[docs]</a><span class="k">def</span> <span class="nf">test_from_table_repeated</span><span class="p">():</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;require&quot;</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">,</span> <span class="s2">&quot;some_field&quot;</span><span class="p">,</span> <span class="s2">&quot;some_value&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">,</span> <span class="s2">&quot;some_field&quot;</span><span class="p">,</span> <span class="s2">&quot;some_value&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">,</span> <span class="s2">&quot;some_field&quot;</span><span class="p">,</span> <span class="s2">&quot;other_value&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;some_field&quot;</span><span class="p">,</span> <span class="s2">&quot;some_value&quot;</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">]},</span>
+            <span class="p">{</span><span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;some_field&quot;</span><span class="p">,</span> <span class="s2">&quot;other_value&quot;</span><span class="p">),</span> <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;baz&quot;</span><span class="p">]},</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">v</span><span class="o">.</span><span class="n">specification</span> <span class="o">==</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="test_from_table_complex"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_from_table_complex">[docs]</a><span class="k">def</span> <span class="nf">test_from_table_complex</span><span class="p">():</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;require&quot;</span><span class="p">],</span>
+        <span class="p">[</span>
+            <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">,</span>
+            <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fval&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Cathode_catalyst_material ; &#39;type&#39;: &#39;string&#39;, &quot;</span>
+            <span class="s2">&quot;&#39;pattern&#39;: &#39;[a-zA-Z]{1,2}/[a -zA-Z]{1,2}&#39;&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;fval&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_MSR</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;fval&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;require&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;Cathode_catalyst_material&quot;</span><span class="p">,</span>
+                        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;[a-zA-Z]{1,2}/[a -zA-Z]{1,2}&quot;</span><span class="p">},</span>
+                    <span class="p">),</span>
+                    <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">v</span><span class="o">.</span><span class="n">specification</span> <span class="o">==</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="test_from_csv"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_from_csv">[docs]</a><span class="k">def</span> <span class="nf">test_from_csv</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+    <span class="c1"># spec1 in CSV form</span>
+    <span class="n">table_spec</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;date,level,field,value,require,other</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;11/1/19,measurement,measurement_type,VIR,Cathode_catalyst_material,its great</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">table_spec</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">v</span><span class="o">.</span><span class="n">specification</span> <span class="o">==</span> <span class="n">spec1</span>
+
+    <span class="n">tempfile</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;vocab_from.csv&quot;</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">table_spec</span><span class="p">)</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tempfile</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">v2</span><span class="o">.</span><span class="n">specification</span> <span class="o">==</span> <span class="n">spec1</span></div>
+
+
+<div class="viewcode-block" id="test_vocab_from_ckan"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_vocab_from_ckan">[docs]</a><span class="k">def</span> <span class="nf">test_vocab_from_ckan</span><span class="p">(</span><span class="n">ckan_info</span><span class="p">:</span> <span class="n">CKANInfo</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ckan_info</span>  <span class="c1"># alias</span>
+    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">login</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">password</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">dataset_id</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">url</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">apikey</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_ckan</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">login</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">dataset_id</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">apikey</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Got vocabulary spec from CKAN: </span><span class="si">{v.specification}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># minimal record should always be OK</span>
+        <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">minimal_record</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failure: </span><span class="si">{failure}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pytest</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span><span class="s2">&quot;Missing some/all CKAN information from environment.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_empty_table_name"><a class="viewcode-back" href="../../../../apidoc/emn_sdk.io.tests.html#emn_sdk.io.tests.test_record_vocab.test_empty_table_name">[docs]</a><span class="k">def</span> <span class="nf">test_empty_table_name</span><span class="p">():</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;require&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_LAB</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;author,institution&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">Metadata</span><span class="o">.</span><span class="n">LVL_EXP</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;technology_type&quot;</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vocabulary</span><span class="o">.</span><span class="n">from_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;72cc11a1-324c-49cd-bf11-083b6acd0571&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;lab&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;lab-meta-id&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">{}}],</span>
+            <span class="s2">&quot;experiment&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;exp-meta-id&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">{}}],</span>
+            <span class="s2">&quot;measurement&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;tabular&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+    <span class="p">}</span>
+    <span class="c1"># no required stuff</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">vocab</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span>
+    <span class="c1"># some required stuff</span>
+    <span class="n">rec</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;lab&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Joe&quot;</span><span class="p">,</span> <span class="s2">&quot;institution&quot;</span><span class="p">:</span> <span class="s2">&quot;Joe&#39;s&quot;</span><span class="p">}</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">vocab</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span>
+    <span class="c1"># all the required stuff</span>
+    <span class="n">rec</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;experiment&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;technology_type&quot;</span><span class="p">:</span> <span class="s2">&quot;LTE&quot;</span><span class="p">}</span>
+    <span class="n">failure</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">vocab</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">failure</span> <span class="ow">is</span> <span class="kc">None</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

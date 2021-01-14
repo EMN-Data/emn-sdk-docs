@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.parsers.tests.test_directoryparser &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../how-to-use.html">How To Use</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>emn_sdk.io.parsers.tests.test_directoryparser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for emn_sdk.io.parsers.tests.test_directoryparser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Tests for emn_sdk.io.parsers.directory_parser module</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># stdlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1"># third-party</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="c1"># package</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.parsers</span> <span class="k">import</span> <span class="n">directory_parser</span>
+<span class="kn">from</span> <span class="nn">emn_sdk.io.parser</span> <span class="k">import</span> <span class="n">BaseParser</span>
+
+
+<span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DummyParser"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.DummyParser">[docs]</a><span class="k">class</span> <span class="nc">DummyParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
+<div class="viewcode-block" id="DummyParser.parse"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.DummyParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">path</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="add_files"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.add_files">[docs]</a><span class="k">def</span> <span class="nf">add_files</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;txt&quot;</span><span class="p">,</span> <span class="s2">&quot;dat&quot;</span><span class="p">,</span> <span class="s2">&quot;csv&quot;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;file</span><span class="si">{i:02d}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span>
+            <span class="k">with</span> <span class="p">(</span><span class="n">base_path</span> <span class="o">/</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;hello </span><span class="si">{i}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_emptyparsers"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.test_emptyparsers">[docs]</a><span class="k">def</span> <span class="nf">test_emptyparsers</span><span class="p">():</span>
+    <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">,</span> <span class="p">{})</span></div>
+
+
+<div class="viewcode-block" id="test_nodir"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.test_nodir">[docs]</a><span class="k">def</span> <span class="nf">test_nodir</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">({</span><span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="n">DummyParser</span><span class="p">()})</span>
+    <span class="n">afile</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;foo&quot;</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">afile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">parse</span><span class="p">,</span> <span class="n">afile</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_conflicting"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.test_conflicting">[docs]</a><span class="k">def</span> <span class="nf">test_conflicting</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+    <span class="c1"># cannot have 2 parser instances match the same file</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">({</span><span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="n">DummyParser</span><span class="p">(),</span> <span class="s2">&quot;*.txt&quot;</span><span class="p">:</span> <span class="n">DummyParser</span><span class="p">()})</span>
+    <span class="n">afile</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;foo.txt&quot;</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">afile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">parse</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">)</span>
+    <span class="c1"># this is ok, since the parser is the same instance</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">DummyParser</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">({</span><span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="n">dp</span><span class="p">,</span> <span class="s2">&quot;*.txt&quot;</span><span class="p">:</span> <span class="n">dp</span><span class="p">})</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+    <span class="c1"># this is also ok, since there&#39;s only one parser</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">DummyParser</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">({</span><span class="s2">&quot;*.txt&quot;</span><span class="p">:</span> <span class="n">DummyParser</span><span class="p">()})</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_nomatch"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.test_nomatch">[docs]</a><span class="k">def</span> <span class="nf">test_nomatch</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+    <span class="c1"># no matches in directory is ok</span>
+    <span class="p">(</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;foo.nomatch&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">({</span><span class="s2">&quot;*.txt&quot;</span><span class="p">:</span> <span class="n">DummyParser</span><span class="p">()})</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="test_basic"><a class="viewcode-back" href="../../../../../apidoc/emn_sdk.io.parsers.tests.html#emn_sdk.io.parsers.tests.test_directoryparser.test_basic">[docs]</a><span class="k">def</span> <span class="nf">test_basic</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+    <span class="n">add_files</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">dummy</span> <span class="o">=</span> <span class="n">DummyParser</span><span class="p">()</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;*.txt&quot;</span><span class="p">:</span> <span class="n">dummy</span><span class="p">}</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">directory_parser</span><span class="o">.</span><span class="n">Parser</span><span class="p">(</span><span class="n">mapping</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;records for *.txt = </span><span class="si">{records}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">records</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">assert</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.txt&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

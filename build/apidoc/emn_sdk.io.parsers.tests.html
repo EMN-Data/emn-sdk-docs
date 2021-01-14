@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io.parsers.tests package &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="emn_sdk.io.parsers.tests.testdata package" href="emn_sdk.io.parsers.tests.testdata.html" />
+    <link rel="prev" title="emn_sdk.io.parsers package" href="emn_sdk.io.parsers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="emn_sdk.html">emn_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="emn_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.command.html">emn_sdk.command package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="emn_sdk.io.html">emn_sdk.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.gui.html">emn_sdk.gui package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk.settings">emn_sdk.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to-use.html">How To Use</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">emn_sdk</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.html">emn_sdk package</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.io.html">emn_sdk.io package</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.io.parsers.html">emn_sdk.io.parsers package</a> &raquo;</li>
+        
+      <li>emn_sdk.io.parsers.tests package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/apidoc/emn_sdk.io.parsers.tests.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="emn-sdk-io-parsers-tests-package">
+<h1>emn_sdk.io.parsers.tests package<a class="headerlink" href="#emn-sdk-io-parsers-tests-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html">emn_sdk.io.parsers.tests.testdata package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows.html">emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows.html#module-emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html#module-emn_sdk.io.parsers.tests.testdata">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.data">
+<span id="emn-sdk-io-parsers-tests-data-module"></span><h2>emn_sdk.io.parsers.tests.data module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.data" title="Permalink to this headline">¶</a></h2>
+<p>Data for tests (Python files are more easily handled)</p>
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.test_directoryparser">
+<span id="emn-sdk-io-parsers-tests-test-directoryparser-module"></span><h2>emn_sdk.io.parsers.tests.test_directoryparser module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.test_directoryparser" title="Permalink to this headline">¶</a></h2>
+<p>Tests for emn_sdk.io.parsers.directory_parser module</p>
+<dl class="class">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.DummyParser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">DummyParser</code><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#DummyParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.DummyParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.BaseParser" title="emn_sdk.io.parser.BaseParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser.BaseParser</span></code></a></p>
+<dl class="method">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.DummyParser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#DummyParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.DummyParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a <cite>path</cite>, which can be a file or a directory,
+and return a list of records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – file or directory</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of records (data and associated metadata)</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.UnknownFileType" title="emn_sdk.io.parser.UnknownFileType"><strong>UnknownFileType</strong></a> – if path leads to a file that
+    is not known, and parser is expected to parse it
+    instead of just ignoring it.</p></li>
+<li><p><a class="reference internal" href="emn_sdk.io.html#emn_sdk.io.parser.ParseError" title="emn_sdk.io.parser.ParseError"><strong>ParseError</strong></a> – if there is some problem processing input data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.add_files">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">add_files</code><span class="sig-paren">(</span><em class="sig-param">base_path</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#add_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.add_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.test_basic">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">test_basic</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#test_basic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.test_basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.test_conflicting">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">test_conflicting</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#test_conflicting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.test_conflicting" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.test_emptyparsers">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">test_emptyparsers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#test_emptyparsers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.test_emptyparsers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.test_nodir">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">test_nodir</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#test_nodir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.test_nodir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_directoryparser.test_nomatch">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_directoryparser.</code><code class="sig-name descname">test_nomatch</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_directoryparser.html#test_nomatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_directoryparser.test_nomatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.test_examples">
+<span id="emn-sdk-io-parsers-tests-test-examples-module"></span><h2>emn_sdk.io.parsers.tests.test_examples module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.test_examples" title="Permalink to this headline">¶</a></h2>
+<p>Test examples, found under <cite>examples/</cite> dir at the
+root of the repository.</p>
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_examples.test_simple1">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_examples.</code><code class="sig-name descname">test_simple1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_examples.html#test_simple1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_examples.test_simple1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.test_jsonparser">
+<span id="emn-sdk-io-parsers-tests-test-jsonparser-module"></span><h2>emn_sdk.io.parsers.tests.test_jsonparser module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.test_jsonparser" title="Permalink to this headline">¶</a></h2>
+<p>Test the parser.json_parser module</p>
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_jsonparser.full_record">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_jsonparser.</code><code class="sig-name descname">full_record</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_jsonparser.html#full_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_jsonparser.full_record" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_jsonparser.test_roundtrip">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_jsonparser.</code><code class="sig-name descname">test_roundtrip</code><span class="sig-paren">(</span><em class="sig-param">full_record</em>, <em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_jsonparser.html#test_roundtrip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_jsonparser.test_roundtrip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.test_sfrparser">
+<span id="emn-sdk-io-parsers-tests-test-sfrparser-module"></span><h2>emn_sdk.io.parsers.tests.test_sfrparser module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.test_sfrparser" title="Permalink to this headline">¶</a></h2>
+<p>Tests of sfr_parser</p>
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_sfrparser.test_dataset_inline_name">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_sfrparser.</code><code class="sig-name descname">test_dataset_inline_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_sfrparser.html#test_dataset_inline_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_sfrparser.test_dataset_inline_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_sfrparser.test_json_serialize">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_sfrparser.</code><code class="sig-name descname">test_json_serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_sfrparser.html#test_json_serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_sfrparser.test_json_serialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_sfrparser.test_parse_basic">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_sfrparser.</code><code class="sig-name descname">test_parse_basic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_sfrparser.html#test_parse_basic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_sfrparser.test_parse_basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.test_spreadsheetparser">
+<span id="emn-sdk-io-parsers-tests-test-spreadsheetparser-module"></span><h2>emn_sdk.io.parsers.tests.test_spreadsheetparser module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.test_spreadsheetparser" title="Permalink to this headline">¶</a></h2>
+<p>Tests of the parsers.spreadsheet_parser module</p>
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.get_meta">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">get_meta</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">level</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#get_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.get_meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to get first (often only) metadata section
+at a given level.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.lte_spreadsheet_complex">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">lte_spreadsheet_complex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#lte_spreadsheet_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.lte_spreadsheet_complex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.lte_spreadsheet_small">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">lte_spreadsheet_small</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#lte_spreadsheet_small"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.lte_spreadsheet_small" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.test_csv">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">test_csv</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#test_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.test_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.test_csv2">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">test_csv2</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#test_csv2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.test_csv2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.test_derived_data">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">test_derived_data</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#test_derived_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.test_derived_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.test_excel">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">test_excel</code><span class="sig-paren">(</span><em class="sig-param">tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#test_excel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.test_excel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.test_lte_spreadsheet_complex">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">test_lte_spreadsheet_complex</code><span class="sig-paren">(</span><em class="sig-param">lte_spreadsheet_complex</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#test_lte_spreadsheet_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.test_lte_spreadsheet_complex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.parsers.tests.test_spreadsheetparser.test_lte_spreadsheet_small">
+<code class="sig-prename descclassname">emn_sdk.io.parsers.tests.test_spreadsheetparser.</code><code class="sig-name descname">test_lte_spreadsheet_small</code><span class="sig-paren">(</span><em class="sig-param">lte_spreadsheet_small</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parsers/tests/test_spreadsheetparser.html#test_lte_spreadsheet_small"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parsers.tests.test_spreadsheetparser.test_lte_spreadsheet_small" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests.util">
+<span id="emn-sdk-io-parsers-tests-util-module"></span><h2>emn_sdk.io.parsers.tests.util module<a class="headerlink" href="#module-emn_sdk.io.parsers.tests.util" title="Permalink to this headline">¶</a></h2>
+<p>Utility for tests</p>
+</div>
+<div class="section" id="module-emn_sdk.io.parsers.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-emn_sdk.io.parsers.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="emn_sdk.io.parsers.tests.testdata.html" class="btn btn-neutral float-right" title="emn_sdk.io.parsers.tests.testdata package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="emn_sdk.io.parsers.html" class="btn btn-neutral float-left" title="emn_sdk.io.parsers package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

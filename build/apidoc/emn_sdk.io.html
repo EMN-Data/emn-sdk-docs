@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>emn_sdk.io package &mdash; EMN-SDK 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="emn_sdk.io.parsers package" href="emn_sdk.io.parsers.html" />
+    <link rel="prev" title="emn_sdk.command package" href="emn_sdk.command.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> EMN-SDK
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../design.html">EMN-SDK Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="emn_sdk.html">emn_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="emn_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.command.html">emn_sdk.command package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">emn_sdk.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.gui.html">emn_sdk.gui package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk.settings">emn_sdk.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.html#module-emn_sdk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to-use.html">How To Use</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EMN-SDK</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">emn_sdk</a> &raquo;</li>
+        
+          <li><a href="emn_sdk.html">emn_sdk package</a> &raquo;</li>
+        
+      <li>emn_sdk.io package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/apidoc/emn_sdk.io.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="emn-sdk-io-package">
+<h1>emn_sdk.io package<a class="headerlink" href="#emn-sdk-io-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="emn_sdk.io.parsers.html">emn_sdk.io.parsers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="emn_sdk.io.parsers.tests.html">emn_sdk.io.parsers.tests package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html">emn_sdk.io.parsers.tests.testdata package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows.html">emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows package</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows.html#module-emn_sdk.io.parsers.tests.testdata.sandia_stch_10rows">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="emn_sdk.io.parsers.tests.testdata.html#module-emn_sdk.io.parsers.tests.testdata">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.data">emn_sdk.io.parsers.tests.data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_directoryparser">emn_sdk.io.parsers.tests.test_directoryparser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_examples">emn_sdk.io.parsers.tests.test_examples module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_jsonparser">emn_sdk.io.parsers.tests.test_jsonparser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_sfrparser">emn_sdk.io.parsers.tests.test_sfrparser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.test_spreadsheetparser">emn_sdk.io.parsers.tests.test_spreadsheetparser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests.util">emn_sdk.io.parsers.tests.util module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="emn_sdk.io.parsers.tests.html#module-emn_sdk.io.parsers.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.batch_parser">emn_sdk.io.parsers.batch_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.directory_parser">emn_sdk.io.parsers.directory_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.generic_dir_parser">emn_sdk.io.parsers.generic_dir_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.json_parser">emn_sdk.io.parsers.json_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.matrix_blocks">emn_sdk.io.parsers.matrix_blocks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.pandas_parser">emn_sdk.io.parsers.pandas_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.patterns">emn_sdk.io.parsers.patterns module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.sfr_parser">emn_sdk.io.parsers.sfr_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers.spreadsheet_parser">emn_sdk.io.parsers.spreadsheet_parser module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.parsers.html#module-emn_sdk.io.parsers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="emn_sdk.io.tests.html">emn_sdk.io.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests.test_ckan">emn_sdk.io.tests.test_ckan module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests.test_model">emn_sdk.io.tests.test_model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests.test_record_vocab">emn_sdk.io.tests.test_record_vocab module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests.test_smoke">emn_sdk.io.tests.test_smoke module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests.test_validate">emn_sdk.io.tests.test_validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests.util">emn_sdk.io.tests.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emn_sdk.io.tests.html#module-emn_sdk.io.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-emn_sdk.io.ckan">
+<span id="emn-sdk-io-ckan-module"></span><h2>emn_sdk.io.ckan module<a class="headerlink" href="#module-emn_sdk.io.ckan" title="Permalink to this headline">¶</a></h2>
+<p>CKAN functions</p>
+<dl class="class">
+<dt id="emn_sdk.io.ckan.CKAN">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.ckan.</code><code class="sig-name descname">CKAN</code><span class="sig-paren">(</span><em class="sig-param">url: str</em>, <em class="sig-param">api_key: str</em>, <em class="sig-param">proxies=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKAN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.ckan.CKANBase" title="emn_sdk.io.ckan.CKANBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.ckan.CKANBase</span></code></a></p>
+<p>Class that handles connecting to CKAN and downloading/uploading data.</p>
+<dl class="method">
+<dt id="emn_sdk.io.ckan.CKAN.download">
+<code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param">project: str = None</em>, <em class="sig-param">dataset: str = None</em>, <em class="sig-param">dest_dir: str = None</em>, <em class="sig-param">overwrite: str = None) -&gt; (&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKAN.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKAN.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download all resources from project + dataset into dest_dir.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> – Project name</p></li>
+<li><p><strong>dataset</strong> – Dataset ID</p></li>
+<li><p><strong>dest_dir</strong> – Destination directory name. Assume it
+already exists</p></li>
+<li><p><strong>overwrite</strong> – Action if file would be overwritten:
+- None: Do nothing, overwrite file
+- “error”: Raise an error. Don’t download anything.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(num_files, num_bytes) downloaded</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#emn_sdk.io.ckan.CKANError" title="emn_sdk.io.ckan.CKANError"><strong>CKANError</strong></a> – Connecting/downloading from CKAN</p></li>
+<li><p><strong>KeyError</strong> – If there was a duplicate filename, and
+    overwrite_ok was False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.ckan.CKAN.set_dataset_info">
+<code class="sig-name descname">set_dataset_info</code><span class="sig-paren">(</span><em class="sig-param">project: str = None</em>, <em class="sig-param">inst: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKAN.set_dataset_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKAN.set_dataset_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set info needed when creating any new dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> – Name of project in CKAN</p></li>
+<li><p><strong>inst</strong> – Name of institution in CKAN</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.ckan.CKAN.upload">
+<code class="sig-name descname">upload</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">records=None</em>, <em class="sig-param">files: List[str] = None</em>, <em class="sig-param">basedir='.'</em>, <em class="sig-param">use_existing: bool = True</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKAN.upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKAN.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload all the records and files into a new CKAN “package”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the CKAN package</p></li>
+<li><p><strong>records</strong> – The records to upload</p></li>
+<li><p><strong>files</strong> – The files to upload</p></li>
+<li><p><strong>basedir</strong> – Base directory for all the files</p></li>
+<li><p><strong>use_existing</strong> – Do not create package</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Package id of created (or existing) package.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#emn_sdk.io.ckan.CKANError" title="emn_sdk.io.ckan.CKANError"><strong>CKANError</strong></a> – if something goes wrong on the CKAN end.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.ckan.CKANBase">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.ckan.</code><code class="sig-name descname">CKANBase</code><span class="sig-paren">(</span><em class="sig-param">url: str</em>, <em class="sig-param">api_key: str</em>, <em class="sig-param">proxies=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKANBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKANBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.obs.Subject</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.ckan.CKANBase.get_projects">
+<code class="sig-name descname">get_projects</code><span class="sig-paren">(</span><em class="sig-param">permission: str = 'create_dataset'</em>, <em class="sig-param">fields: Sequence[str] = ()</em><span class="sig-paren">)</span> &#x2192; Dict[str, str]<a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKANBase.get_projects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKANBase.get_projects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get projects accessible by this user (user known by api-key).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>permission</strong> – CKAN permission this user should have in order to include
+the project (aka organization) in the list. Other options
+include: “read”, “manage_group”</p></li>
+<li><p><strong>fields</strong> – List of fields from the project (organization) record to return.
+Default is “id”. Others include “name”, “created”, “description”.
+You can explicitly pass <cite>None</cite> to include all fields.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary where the key is the project’s “display” name, which the
+user would see on the web page, and the value is a dict with keys equal
+to the list given to the <cite>fields</cite> argument (and values from the record).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="emn_sdk.io.ckan.CKANError">
+<em class="property">exception </em><code class="sig-prename descclassname">emn_sdk.io.ckan.</code><code class="sig-name descname">CKANError</code><a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKANError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKANError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="emn_sdk.io.ckan.CKANPackageExistsError">
+<em class="property">exception </em><code class="sig-prename descclassname">emn_sdk.io.ckan.</code><code class="sig-name descname">CKANPackageExistsError</code><a class="reference internal" href="../_modules/emn_sdk/io/ckan.html#CKANPackageExistsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.ckan.CKANPackageExistsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.ckan.CKANError" title="emn_sdk.io.ckan.CKANError"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.ckan.CKANError</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.model">
+<span id="emn-sdk-io-model-module"></span><h2>emn_sdk.io.model module<a class="headerlink" href="#module-emn_sdk.io.model" title="Permalink to this headline">¶</a></h2>
+<p>Data model for EMN data uploads</p>
+<dl class="class">
+<dt id="emn_sdk.io.model.BaseDataset">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">BaseDataset</code><span class="sig-paren">(</span><em class="sig-param">name: str = ''</em>, <em class="sig-param">id_: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#BaseDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.BaseDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.add_derived">
+<code class="sig-name descname">add_derived</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">units: str</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#BaseDataset.add_derived"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.add_derived" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.derived">
+<em class="property">property </em><code class="sig-name descname">derived</code><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.derived" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.get_level">
+<code class="sig-name descname">get_level</code><span class="sig-paren">(</span><em class="sig-param">level: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#BaseDataset.get_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.get_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.id_">
+<em class="property">property </em><code class="sig-name descname">id_</code><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.metadata_ids">
+<em class="property">property </em><code class="sig-name descname">metadata_ids</code><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.metadata_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.BaseDataset.set_meta">
+<code class="sig-name descname">set_meta</code><span class="sig-paren">(</span><em class="sig-param">metadata: emn_sdk.io.model.Metadata</em>, <em class="sig-param">identifiers: dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#BaseDataset.set_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.BaseDataset.set_meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.model.Data">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">Data</code><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Datasets that comprise data for a Record.</p>
+<dl class="method">
+<dt id="emn_sdk.io.model.Data.add_dataset">
+<code class="sig-name descname">add_dataset</code><span class="sig-paren">(</span><em class="sig-param">dataset: emn_sdk.io.model.BaseDataset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Data.add_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Data.add_dataset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Data.is_empty">
+<code class="sig-name descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Data.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Data.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.model.Dataset">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.model.BaseDataset" title="emn_sdk.io.model.BaseDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.model.BaseDataset</span></code></a></p>
+<p>Create a Dataset, associated with metadata and containing data.</p>
+<dl class="method">
+<dt id="emn_sdk.io.model.Dataset.add_observation">
+<code class="sig-name descname">add_observation</code><span class="sig-paren">(</span><em class="sig-param">row</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Dataset.add_observation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Dataset.add_observation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of values as a single observation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Dataset.header">
+<em class="property">property </em><code class="sig-name descname">header</code><a class="headerlink" href="#emn_sdk.io.model.Dataset.header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Dataset.observations">
+<em class="property">property </em><code class="sig-name descname">observations</code><a class="headerlink" href="#emn_sdk.io.model.Dataset.observations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Dataset.set_header">
+<code class="sig-name descname">set_header</code><span class="sig-paren">(</span><em class="sig-param">header: emn_sdk.io.model.DatasetHeader</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Dataset.set_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Dataset.set_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.model.DatasetHeader">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">DatasetHeader</code><a class="reference internal" href="../_modules/emn_sdk/io/model.html#DatasetHeader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.DatasetHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.model.DatasetHeader.add_column">
+<code class="sig-name descname">add_column</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">units: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#DatasetHeader.add_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.DatasetHeader.add_column" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.DatasetHeader.columns">
+<em class="property">property </em><code class="sig-name descname">columns</code><a class="headerlink" href="#emn_sdk.io.model.DatasetHeader.columns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.model.Metadata">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">Metadata</code><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Metadata for a Record.</p>
+<p>Use the <cite>add_&lt;section&gt;</cite> methods to add metadata of a given level.</p>
+<dl class="attribute">
+<dt id="emn_sdk.io.model.Metadata.LEVELS">
+<code class="sig-name descname">LEVELS</code><em class="property"> = ('lab', 'experiment', 'measurement', 'sample')</em><a class="headerlink" href="#emn_sdk.io.model.Metadata.LEVELS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.model.Metadata.LVL_EXP">
+<code class="sig-name descname">LVL_EXP</code><em class="property"> = 'experiment'</em><a class="headerlink" href="#emn_sdk.io.model.Metadata.LVL_EXP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.model.Metadata.LVL_LAB">
+<code class="sig-name descname">LVL_LAB</code><em class="property"> = 'lab'</em><a class="headerlink" href="#emn_sdk.io.model.Metadata.LVL_LAB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.model.Metadata.LVL_MSR">
+<code class="sig-name descname">LVL_MSR</code><em class="property"> = 'measurement'</em><a class="headerlink" href="#emn_sdk.io.model.Metadata.LVL_MSR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="emn_sdk.io.model.Metadata.LVL_SMP">
+<code class="sig-name descname">LVL_SMP</code><em class="property"> = 'sample'</em><a class="headerlink" href="#emn_sdk.io.model.Metadata.LVL_SMP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Metadata.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">group: Dict[str, dict]</em><span class="sig-paren">)</span> &#x2192; Dict[str, str]<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Metadata.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Metadata.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a group of metadata blocks, from different levels.
+This is a convenient way to add all the necessary metadata levels in one call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> – A dict where key is the name of the metadata level, and
+value is a dict of metadata fields and values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dict where key is the name of the metadata level, and value is
+the unique identifier (auto-generated) for the provided metadata block</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Metadata.add_one">
+<code class="sig-name descname">add_one</code><span class="sig-paren">(</span><em class="sig-param">level: str</em>, <em class="sig-param">meta</em>, <em class="sig-param">id_: str = None</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Metadata.add_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Metadata.add_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add one metadata block for a given level.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Metadata.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">level: str</em>, <em class="sig-param">uuid: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Metadata.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Metadata.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Metadata.get_level">
+<code class="sig-name descname">get_level</code><span class="sig-paren">(</span><em class="sig-param">level: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Metadata.get_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Metadata.get_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Metadata.is_empty">
+<code class="sig-name descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Metadata.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Metadata.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.model.RawDataset">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">RawDataset</code><span class="sig-paren">(</span><em class="sig-param">require_files=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#RawDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.RawDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.model.BaseDataset" title="emn_sdk.io.model.BaseDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.model.BaseDataset</span></code></a></p>
+<p>Create a Dataset, associated with metadata and containing raw data.</p>
+<dl class="method">
+<dt id="emn_sdk.io.model.RawDataset.add_file">
+<code class="sig-name descname">add_file</code><span class="sig-paren">(</span><em class="sig-param">path: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#RawDataset.add_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.RawDataset.add_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.RawDataset.filenames">
+<em class="property">property </em><code class="sig-name descname">filenames</code><a class="headerlink" href="#emn_sdk.io.model.RawDataset.filenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.model.Record">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">Record</code><span class="sig-paren">(</span><em class="sig-param">id_=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>One or more datasets and associated metadata.</p>
+<p>See the “record()” function in tests/test_model for an
+example of how to build a record.</p>
+<p>Once constructed, you can write out the record with <cite>as_&lt;format&gt;</cite> methods, which
+all take an optional output file (otherwise return a string):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rec</span> <span class="o">=</span> <span class="n">Record</span><span class="p">()</span>
+<span class="c1"># .. construct it ..</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">as_json</span><span class="p">()</span>
+<span class="c1"># -or-</span>
+<span class="n">rec</span><span class="o">.</span><span class="n">as_json</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;record.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="emn_sdk.io.model.Record.as_dict">
+<code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#Record.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Record.as_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Record.as_json">
+<code class="sig-name descname">as_json</code><span class="sig-paren">(</span><em class="sig-param">output_file: io.IOBase = None</em>, <em class="sig-param">**json_kw</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Record.as_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Record.as_json" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_file</strong> – Output file (or None)</p></li>
+<li><p><strong>**json_kw</strong> – Additional keywords passed to <cite>json.dump[s]()</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None if an output file is given.
+Otherwise a string of serialized JSON.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Record.from_json">
+<em class="property">static </em><code class="sig-name descname">from_json</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">require_files=False</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.model.Record<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Record.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Record.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.model.Record.is_empty">
+<code class="sig-name descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/emn_sdk/io/model.html#Record.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.Record.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.model.json_type">
+<code class="sig-prename descclassname">emn_sdk.io.model.</code><code class="sig-name descname">json_type</code><span class="sig-paren">(</span><em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/model.html#json_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.model.json_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parser">
+<span id="emn-sdk-io-parser-module"></span><h2>emn_sdk.io.parser module<a class="headerlink" href="#module-emn_sdk.io.parser" title="Permalink to this headline">¶</a></h2>
+<p>Parser <cite>framework</cite>.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parser.BaseParser">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parser.</code><code class="sig-name descname">BaseParser</code><a class="reference internal" href="../_modules/emn_sdk/io/parser.html#BaseParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser.BaseParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parser interface.</p>
+<p>Subclasses should implement the <cite>parse()</cite> method.</p>
+<dl class="attribute">
+<dt id="emn_sdk.io.parser.BaseParser.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Generic parser'</em><a class="headerlink" href="#emn_sdk.io.parser.BaseParser.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parser.BaseParser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">path: str</em><span class="sig-paren">)</span> &#x2192; List[emn_sdk.io.model.Record]<a class="reference internal" href="../_modules/emn_sdk/io/parser.html#BaseParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser.BaseParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a <cite>path</cite>, which can be a file or a directory,
+and return a list of records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – file or directory</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of records (data and associated metadata)</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#emn_sdk.io.parser.UnknownFileType" title="emn_sdk.io.parser.UnknownFileType"><strong>UnknownFileType</strong></a> – if path leads to a file that
+    is not known, and parser is expected to parse it
+    instead of just ignoring it.</p></li>
+<li><p><a class="reference internal" href="#emn_sdk.io.parser.ParseError" title="emn_sdk.io.parser.ParseError"><strong>ParseError</strong></a> – if there is some problem processing input data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="emn_sdk.io.parser.ParseError">
+<em class="property">exception </em><code class="sig-prename descclassname">emn_sdk.io.parser.</code><code class="sig-name descname">ParseError</code><a class="reference internal" href="../_modules/emn_sdk/io/parser.html#ParseError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser.ParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="emn_sdk.io.parser.UnknownFileType">
+<em class="property">exception </em><code class="sig-prename descclassname">emn_sdk.io.parser.</code><code class="sig-name descname">UnknownFileType</code><a class="reference internal" href="../_modules/emn_sdk/io/parser.html#UnknownFileType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser.UnknownFileType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.parser_factory">
+<span id="emn-sdk-io-parser-factory-module"></span><h2>emn_sdk.io.parser_factory module<a class="headerlink" href="#module-emn_sdk.io.parser_factory" title="Permalink to this headline">¶</a></h2>
+<p>Create parsers based on a mapping between some attribute, e.g. a file name,
+and the appropriate parser.</p>
+<dl class="class">
+<dt id="emn_sdk.io.parser_factory.BaseParserFactory">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parser_factory.</code><code class="sig-name descname">BaseParserFactory</code><span class="sig-paren">(</span><em class="sig-param">parser_patterns: Dict[str, object]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#BaseParserFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.BaseParserFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.BaseParserFactory.get_parser">
+<code class="sig-name descname">get_parser</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#BaseParserFactory.get_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.BaseParserFactory.get_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a parser. Do not use directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>parser class (as passed to parser_patterns in constructor), or None if</dt><dd><p>no match is found</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>KeyError if more than one parser matches</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parser_factory.DirectoryParserFactory">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parser_factory.</code><code class="sig-name descname">DirectoryParserFactory</code><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#DirectoryParserFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.DirectoryParserFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.parser_factory.BaseParserFactory" title="emn_sdk.io.parser_factory.BaseParserFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser_factory.BaseParserFactory</span></code></a></p>
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.DirectoryParserFactory.add_matcher">
+<code class="sig-name descname">add_matcher</code><span class="sig-paren">(</span><em class="sig-param">matcher</em>, <em class="sig-param">parser_instance</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#DirectoryParserFactory.add_matcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.DirectoryParserFactory.add_matcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new matcher -&gt; parser mapping.
+Passing ‘None’ as the <cite>parser_instance</cite> will delete the mapping.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.DirectoryParserFactory.get_parser">
+<code class="sig-name descname">get_parser</code><span class="sig-paren">(</span><em class="sig-param">directory: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#DirectoryParserFactory.get_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.DirectoryParserFactory.get_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a parser. Do not use directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>parser class (as passed to parser_patterns in constructor), or None if</dt><dd><p>no match is found</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>KeyError if more than one parser matches</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parser_factory.FilenameParserFactory">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parser_factory.</code><code class="sig-name descname">FilenameParserFactory</code><span class="sig-paren">(</span><em class="sig-param">parser_patterns: Dict[str, object], glob=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#FilenameParserFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.FilenameParserFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.parser_factory.BaseParserFactory" title="emn_sdk.io.parser_factory.BaseParserFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.parser_factory.BaseParserFactory</span></code></a></p>
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.FilenameParserFactory.get_parser">
+<code class="sig-name descname">get_parser</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; object<a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#FilenameParserFactory.get_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.FilenameParserFactory.get_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a parser for the given filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – Name of file to parse</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>parser class (as passed to parser_patterns in constructor), or None if</dt><dd><p>no match is found</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>KeyError if more than one parser matches</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.parser_factory.ParserFactory">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.parser_factory.</code><code class="sig-name descname">ParserFactory</code><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#ParserFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.ParserFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.ParserFactory.detect_parser">
+<code class="sig-name descname">detect_parser</code><span class="sig-paren">(</span><em class="sig-param">path: pathlib.Path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#ParserFactory.detect_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.ParserFactory.detect_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.ParserFactory.from_settings">
+<em class="property">static </em><code class="sig-name descname">from_settings</code><span class="sig-paren">(</span><em class="sig-param">s: emn_sdk.settings.Settings</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.parser_factory.ParserFactory<a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#ParserFactory.from_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.ParserFactory.from_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.ParserFactory.get_parser">
+<code class="sig-name descname">get_parser</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#ParserFactory.get_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.ParserFactory.get_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.ParserFactory.register_parser">
+<code class="sig-name descname">register_parser</code><span class="sig-paren">(</span><em class="sig-param">parser: emn_sdk.io.parser.BaseParser</em>, <em class="sig-param">name: str</em>, <em class="sig-param">matcher</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#ParserFactory.register_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.ParserFactory.register_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.parser_factory.ParserFactory.unregister_parser">
+<code class="sig-name descname">unregister_parser</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/parser_factory.html#ParserFactory.unregister_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.parser_factory.ParserFactory.unregister_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.record_schema">
+<span id="emn-sdk-io-record-schema-module"></span><h2>emn_sdk.io.record_schema module<a class="headerlink" href="#module-emn_sdk.io.record_schema" title="Permalink to this headline">¶</a></h2>
+<p>Schema and validation</p>
+</div>
+<div class="section" id="module-emn_sdk.io.record_vocab">
+<span id="emn-sdk-io-record-vocab-module"></span><h2>emn_sdk.io.record_vocab module<a class="headerlink" href="#module-emn_sdk.io.record_vocab" title="Permalink to this headline">¶</a></h2>
+<p>Extend record schema with data-type-specific vocabulary.</p>
+<dl class="class">
+<dt id="emn_sdk.io.record_vocab.CKANVocabulary">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.record_vocab.</code><code class="sig-name descname">CKANVocabulary</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">project=None</em>, <em class="sig-param">institution=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#CKANVocabulary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.CKANVocabulary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#emn_sdk.io.ckan.CKANBase" title="emn_sdk.io.ckan.CKANBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">emn_sdk.io.ckan.CKANBase</span></code></a></p>
+<p>Interaction with a vocabulary (stored as CSV) on a CKAN server.</p>
+<dl class="method">
+<dt id="emn_sdk.io.record_vocab.CKANVocabulary.fetch">
+<code class="sig-name descname">fetch</code><span class="sig-paren">(</span><em class="sig-param">user: str</em>, <em class="sig-param">passwd: str</em>, <em class="sig-param">dataset_id: str = None</em>, <em class="sig-param">ignore_other_csv: bool = True</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.record_vocab.Vocabulary<a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#CKANVocabulary.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.CKANVocabulary.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch vocabulary from combined resources in the given dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – CKAN login name</p></li>
+<li><p><strong>passwd</strong> – CKAN password</p></li>
+<li><p><strong>dataset_id</strong> – CKAN dataset ID</p></li>
+<li><p><strong>ignore_other_csv</strong> – If True, allow non-vocabulary CSV, otherwise
+raise a ValueError.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Vocabulary instance</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – if there are no (parse-able) resources with data</p></li>
+<li><p><a class="reference internal" href="#emn_sdk.io.ckan.CKANError" title="emn_sdk.io.ckan.CKANError"><strong>CKANError</strong></a> – problems communicating with CKAN</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="emn_sdk.io.record_vocab.Vocabulary">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.record_vocab.</code><code class="sig-name descname">Vocabulary</code><span class="sig-paren">(</span><em class="sig-param">spec: Dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#Vocabulary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>For the EMN record metadata, provide ability to add a vocabulary of
+required fields, conditional on the presence of certain other
+field/value combinations. This allows us to basically treat some fields as
+specifying the “type” of record, and then check that other
+required fields are present for records of that type.</p>
+<p>Note to developers: this uses the “if”/”then” features in JSON Schema Draft 7.</p>
+<dl class="attribute">
+<dt id="emn_sdk.io.record_vocab.Vocabulary.TBL_COLS">
+<code class="sig-name descname">TBL_COLS</code><em class="property"> = ('level', 'field', 'value', 'require')</em><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary.TBL_COLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.record_vocab.Vocabulary.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">schema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#Vocabulary.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary.extend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.record_vocab.Vocabulary.from_ckan">
+<em class="property">classmethod </em><code class="sig-name descname">from_ckan</code><span class="sig-paren">(</span><em class="sig-param">user: str</em>, <em class="sig-param">passwd: str</em>, <em class="sig-param">dataset_id: str</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.record_vocab.Vocabulary<a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#Vocabulary.from_ckan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary.from_ckan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create from CKAN dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – CKAN login name</p></li>
+<li><p><strong>passwd</strong> – CKAN login password</p></li>
+<li><p><strong>dataset_id</strong> – CKAN dataset (package) with vocabulary resource(s)</p></li>
+<li><p><strong>*args</strong> – Passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">io.ckan.CKANBase</span></code> constructor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Instance, initialized from the dataset.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#emn_sdk.io.ckan.CKANError" title="emn_sdk.io.ckan.CKANError"><strong>CKANError</strong></a> – for problems with CKAN</p></li>
+<li><p><strong>ValueError</strong> – for problems with the data itself</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.record_vocab.Vocabulary.from_csv">
+<em class="property">classmethod </em><code class="sig-name descname">from_csv</code><span class="sig-paren">(</span><em class="sig-param">obj: Union[str, TextIO]</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.record_vocab.Vocabulary<a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#Vocabulary.from_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary.from_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.record_vocab.Vocabulary.from_table">
+<em class="property">classmethod </em><code class="sig-name descname">from_table</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span> &#x2192; emn_sdk.io.record_vocab.Vocabulary<a class="reference internal" href="../_modules/emn_sdk/io/record_vocab.html#Vocabulary.from_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary.from_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="emn_sdk.io.record_vocab.Vocabulary.specification">
+<em class="property">property </em><code class="sig-name descname">specification</code><a class="headerlink" href="#emn_sdk.io.record_vocab.Vocabulary.specification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io.validation">
+<span id="emn-sdk-io-validation-module"></span><h2>emn_sdk.io.validation module<a class="headerlink" href="#module-emn_sdk.io.validation" title="Permalink to this headline">¶</a></h2>
+<p>JSON validation</p>
+<dl class="class">
+<dt id="emn_sdk.io.validation.ValidationFailure">
+<em class="property">class </em><code class="sig-prename descclassname">emn_sdk.io.validation.</code><code class="sig-name descname">ValidationFailure</code><span class="sig-paren">(</span><em class="sig-param">what_i_was_doing=None</em>, <em class="sig-param">error=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/emn_sdk/io/validation.html#ValidationFailure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.validation.ValidationFailure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="emn_sdk.io.validation.validate">
+<code class="sig-prename descclassname">emn_sdk.io.validation.</code><code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">obj: Union[Dict, Record, str, TextIO], vocab: emn_sdk.io.record_vocab.Vocabulary = None</em><span class="sig-paren">)</span> &#x2192; Union[None, emn_sdk.io.validation.ValidationFailure]<a class="reference internal" href="../_modules/emn_sdk/io/validation.html#validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#emn_sdk.io.validation.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate input as a serialized <cite>Record</cite> from the <cite>emn_sdk.io.model</cite> module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – The Record to validate, as a Python dict, a string of JSON representing
+the dict, a file containing the JSON, or a Record object.</p></li>
+<li><p><strong>vocab</strong> – Optional additional “vocabulary” for the record metadata.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result, which has an accessor <cite>success</cite> to check if it went ok.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-emn_sdk.io">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-emn_sdk.io" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="emn_sdk.io.parsers.html" class="btn btn-neutral float-right" title="emn_sdk.io.parsers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="emn_sdk.command.html" class="btn btn-neutral float-left" title="emn_sdk.command package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Energy Materials Network team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
